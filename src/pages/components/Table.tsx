@@ -1,7 +1,7 @@
 import type { FC } from "react";
 
 const styles = {
-  primary: "bg-primary-500 text-white",
+  primary: "bg-primary-900 text-white",
 } as const;
 
 type TableProps = {

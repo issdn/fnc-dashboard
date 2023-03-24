@@ -1,10 +1,8 @@
-`use client`;
-
 import type { FC } from "react";
 
 const styles = {
   primary:
-    "rounded-3xl border-2 h-full disabled:bg-orange-300 border-orange-500 focus:outline outline-orange-500 outline-offset-1 disabled:outline-none disabled:cursor-not-allowed invalid:outline-red-500",
+    "rounded-3xl border-2 h-full disabled:bg-neutral-700 border-neutral-900 focus:outline outline-neutral-900 outline-offset-1 disabled:outline-none disabled:cursor-not-allowed invalid:outline-red-900",
 } as const;
 
 type InputProps = {
