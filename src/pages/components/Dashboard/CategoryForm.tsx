@@ -1,9 +1,10 @@
 import type { FC } from "react";
 import IconButton from "../IconButton";
 import type { Category } from "@prisma/client";
-import { ErrorMessage, Field, Formik } from "formik";
+import { Formik } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
+import Input from "./Input";
 
 type CreateCategory = Omit<Category, "id">;
 
@@ -14,7 +15,7 @@ type CategoryFormProps = {
 
 export const categoryValidationSchema = z.object({
   name: z
-    .string()
+    .string({ required_error: "Category name is required." })
     .min(1, { message: "Name must be at least 1 character long." })
     .regex(/^[a-zA-Z\s]*$/, { message: "Only letters are allowed." }),
   monthly_treshold: z.preprocess(
@@ -22,7 +23,6 @@ export const categoryValidationSchema = z.object({
     z
       .number({ invalid_type_error: "Threshold must be a positive number." })
       .nonnegative()
-      .min(1)
   ),
 });
 
@@ -36,50 +36,27 @@ const CategoryForm: FC<CategoryFormProps> = ({ onSubmit, initialValues }) => {
       }}
     >
       {({ isSubmitting }) => (
-        <form>
+        <form onSubmit={(e) => e.preventDefault()}>
           <div className="flex flex-col gap-y-4">
-            <div className="flex flex-col gap-y-2">
-              <label htmlFor="category">Category name:</label>
-              <Field
-                className="input-primary"
-                type="text"
-                name="name"
-                props={{
-                  placeholder: "Category name",
-                  type: "text",
-                  required: true,
-                  minLength: 1,
-                  maxLength: 128,
-                }}
-              />
-              <ErrorMessage
-                className="text-sm text-red-600"
-                name="name"
-                component="p"
-              />
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <label htmlFor="monthly_treshold">Threshold:</label>
-              <Field
-                className="input-primary"
-                name="monthly_treshold"
-                props={{
-                  placeholder: "Monthly Treshold",
-                  required: true,
-                  inputMode: "decimal",
-                  pattern: "[0-9.,]*",
-                }}
-              />
-              <ErrorMessage
-                className="text-sm text-red-600"
-                name="monthly_treshold"
-                component="p"
-              />
-            </div>
+            <Input
+              label="Category Name:"
+              type="text"
+              name="name"
+              placeholder="Category name"
+            />
+
+            <Input
+              label="Treshold:"
+              type="text"
+              name="monthly_treshold"
+              placeholder="Monthly treshold"
+            />
+
             <IconButton
               style="primary"
               icon="add"
               attributes={{ disabled: isSubmitting }}
+              iconClassName="text-3xl"
             />
           </div>
         </form>

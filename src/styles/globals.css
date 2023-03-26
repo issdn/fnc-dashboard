@@ -55,6 +55,9 @@
 
   @layer components{
     .input-primary {
-      @apply rounded-xl border-2 border-neutral-900 px-4 py-2 outline-offset-2 outline-neutral-900 invalid:border-red-900 invalid:outline invalid:outline-red-900 focus:outline;
+      @apply rounded-xl border-2 border-neutral-900 px-4 py-2 outline-offset-2 outline-neutral-900 focus:outline;
+    }
+    .input-invalid{
+      @apply border-red-500 outline-red-500
     }
   }

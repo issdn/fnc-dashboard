@@ -36,10 +36,11 @@ const IconButton: FC<IconButtonProps> = ({
   return (
     <button
       {...attributes}
-      className={`flex flex-row items-center justify-center px-1.5 py-0.5 outline-offset-2 focus:outline ${className} ${styles[style]}`}
+      className={`flex flex-row items-center justify-center p-1 outline-offset-2 focus:outline md:px-2 ${className} ${styles[style]}`}
       onClick={onClick}
     >
-      <span className={`material-icons text-3xl ${iconClassName}`}>{icon}</span>
+      <span className={`material-icons ${iconClassName}`}>{icon}</span>
+
       {children}
     </button>
   );

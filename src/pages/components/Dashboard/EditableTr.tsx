@@ -26,31 +26,33 @@ const EditableTr: FC<EditableTrProps> = ({
         {Object.values(category).map((cell, i) => (
           <td key={i}>{cell}</td>
         ))}
-        <td className="flex flex-row justify-center gap-x-1 py-1">
-          <IconButton
-            onClick={openModal}
-            icon="edit"
-            style="clear"
-            className={`${className} ${
-              index % 2 === 0
-                ? "w-fit rounded-xl bg-neutral-900 text-neutral-100 outline-neutral-100 hover:bg-neutral-800 disabled:bg-neutral-300"
-                : "w-fit rounded-xl bg-neutral-800 text-neutral-100 outline-neutral-100 hover:bg-neutral-700 disabled:bg-neutral-300"
-            }`}
-          />
-          <IconButton
-            style={
-              index % 2 === 0 ? "primaryContrast" : "primaryLighterContrast"
-            }
-            icon="delete_forever"
-            className="w-fit px-1.5 py-0.5"
-            iconClassName="text-2xl"
-          />
+        <td className="flex flex-row justify-center py-1">
+          <div className="flex flex-row gap-x-1">
+            <IconButton
+              onClick={openModal}
+              icon="edit"
+              style="clear"
+              className={`${className} ${
+                index % 2 === 0
+                  ? "rounded-xl bg-neutral-900 text-base text-neutral-100 outline-neutral-100 hover:bg-neutral-800 disabled:bg-neutral-300"
+                  : "rounded-xl bg-neutral-800 text-neutral-100 outline-neutral-100 hover:bg-neutral-700 disabled:bg-neutral-300"
+              }`}
+              iconClassName="md:text-3xl"
+            />
+            <IconButton
+              style={
+                index % 2 === 0 ? "primaryContrast" : "primaryLighterContrast"
+              }
+              icon="delete_forever"
+              iconClassName="md:text-3xl"
+            />
+          </div>
         </td>
       </tr>
       <Modal key={index} isOpen={isOpen} closeModal={closeModal}>
         <CategoryForm
           onSubmit={(values) =>
-            api.database.editCategory
+            api.category.editCategory
               .useMutation()
               .mutate({ id: id, ...values })
           }

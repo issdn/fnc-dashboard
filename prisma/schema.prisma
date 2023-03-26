@@ -14,7 +14,8 @@ model Expense {
     id       String    @id @default(auto()) @map ("_id") @db.ObjectId
     date     DateTime  @default(now())
     amount   Float
-    category String
+    category Category    @relation(fields: [category_name], references: [name])
+    category_name String
     name     String    @default("")
 }
 
@@ -28,4 +29,5 @@ model Category {
     id       String    @id @default(auto()) @map ("_id") @db.ObjectId
     name     String    @unique
     monthly_treshold   Float
+    expenses Expense[]
 }

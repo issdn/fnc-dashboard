@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ToastType } from "./ToastContainer";
+import type { ToastType } from "./ToastContainer";
 
 export type ToastColorType = "error" | "success";
 
