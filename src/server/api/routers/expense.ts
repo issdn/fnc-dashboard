@@ -12,8 +12,8 @@ export const expenseRouter = createTRPCRouter({
         date: z.date(),
       })
     )
-    .mutation(({ ctx, input }) => {
-      return ctx.prisma.expense.create({
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.expense.create({
         data: {
           amount: input.amount,
           category_name: input.category_name,
@@ -32,8 +32,8 @@ export const expenseRouter = createTRPCRouter({
         date: z.date(),
       })
     )
-    .mutation(({ ctx, input }) => {
-      return ctx.prisma.expense.update({
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.expense.update({
         where: {
           id: input.id,
         },
@@ -47,13 +47,13 @@ export const expenseRouter = createTRPCRouter({
     }),
   getAllExpenses: publicProcedure
     .input(z.object({}))
-    .query(({ ctx, input }) => {
-      return ctx.prisma.expense.findMany();
+    .query(async ({ ctx, input }) => {
+      await ctx.prisma.expense.findMany();
     }),
   deleteExpense: publicProcedure
     .input(z.object({ id: z.string() }))
-    .mutation(({ ctx, input }) => {
-      return ctx.prisma.expense.delete({
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.expense.delete({
         where: {
           id: input.id,
         },

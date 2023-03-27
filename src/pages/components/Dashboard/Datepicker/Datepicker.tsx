@@ -6,15 +6,16 @@ import {
   useRef,
   useState,
 } from "react";
+import { FieldConfig, useField } from "formik";
 import IconButton from "../../IconButton";
 import { useVisibility } from "../hooks";
 import { useCalendar } from "./hooks";
 import { handleKeyDownSelection, handleMouseSelection } from "./functions";
-import Dateinput from "./Dateinput";
 
 type DatepickerProps = {
   calendar: ReturnType<typeof useCalendar>;
-};
+} & JSX.IntrinsicElements["input"] &
+  FieldConfig<string>;
 
 const MONTH_NAMES = [
   "January",
@@ -31,8 +32,9 @@ const MONTH_NAMES = [
   "December",
 ];
 
-const Datepicker: FC<DatepickerProps> = ({ calendar }) => {
+const Datepicker: FC<DatepickerProps> = ({ calendar, ...props }) => {
   const { isVisible, toggleVisibility } = useVisibility();
+  const [field, meta] = useField(props);
 
   const renderDayButton = (day: number) => {
     const disabled = calendar.reachedMaxDay(day) || calendar.reachedMinDay(day);
@@ -61,12 +63,27 @@ const Datepicker: FC<DatepickerProps> = ({ calendar }) => {
 
   return (
     <div className="flex w-full flex-col gap-y-2 text-neutral-100 sm:w-80">
-      <div className="flex w-full flex-row items-center justify-between gap-x-2 rounded-xl bg-neutral-900 px-8 py-1">
-        <Dateinput calendar={calendar} />
+      <div className="relative flex w-full flex-row items-center justify-between rounded-xl">
+        <input
+          {...field}
+          {...props}
+          onSelectCapture={(e) => e.preventDefault()}
+          onMouseUpCapture={handleMouseSelection}
+          onKeyDown={(e) => {
+            handleKeyDownSelection(e, calendar);
+          }}
+          onBlur={(e) => {
+            calendar.setDate(e.target.value);
+          }}
+          onChange={(e) => calendar.setDate(e.target.value)}
+          value={calendar.date.format(calendar.format).toString()}
+          className="h-full w-full whitespace-nowrap break-keep rounded-xl border-2 border-neutral-900 bg-neutral-100 py-3 text-center font-bold text-neutral-900 outline-none transition-colors duration-300 hover:border-neutral-500 focus:border-blue-600"
+        ></input>
         <IconButton
           onClick={toggleVisibility}
           icon="calendar_month"
-          className="flex flex-row items-center gap-x-2 rounded-xl px-4 enabled:hover:bg-neutral-700 disabled:cursor-default disabled:text-neutral-500"
+          className="absolute right-2 flex flex-row items-center gap-x-2 rounded-xl px-4 enabled:hover:bg-neutral-900/10 disabled:cursor-default disabled:text-neutral-700"
+          iconClassName="my-0.5 text-neutral-900"
         />
       </div>
       <div className="relative w-full">
@@ -83,7 +100,7 @@ const Datepicker: FC<DatepickerProps> = ({ calendar }) => {
                       calendar.date.month() - 2
                     ),
                   }}
-                  iconClassName="text-2xl mx-1"
+                  iconClassName="text-2xl mx-1 md:mx-0"
                 />
                 <div className="flex flex-col items-center">
                   <p className=" text-xl font-bold">
@@ -100,7 +117,7 @@ const Datepicker: FC<DatepickerProps> = ({ calendar }) => {
                       calendar.date.month() + 2
                     ),
                   }}
-                  iconClassName="text-2xl mx-1"
+                  iconClassName="text-2xl mx-1 md:mx-0"
                 />
               </div>
               <div className="w-full px-2">

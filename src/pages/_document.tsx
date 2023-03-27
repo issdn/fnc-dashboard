@@ -1,7 +1,11 @@
 import type { DocumentType } from "next/dist/shared/lib/utils";
 import { Head, Html, Main, NextScript } from "next/document";
+import { useToast } from "./components/Dashboard/Toast/hooks";
+import { ToastProvider } from "./components/Dashboard/Toast/toastContext";
+import ToastContainer from "./components/Dashboard/Toast/ToastContainer";
 
 const Document: DocumentType = () => {
+  const { toasts, deleteToast, addToast } = useToast();
   return (
     <Html>
       <Head>
@@ -20,10 +24,13 @@ const Document: DocumentType = () => {
           rel="stylesheet"
         />
       </Head>
-      <body>
-        <Main />
-        <div id="__modal-container" />
-        <NextScript />
+      <body className="font-mono">
+        <ToastProvider addToast={addToast}>
+          <Main />
+          <div id="__modal-container" />
+          <NextScript />
+          <ToastContainer toasts={toasts} deleteToast={deleteToast} />
+        </ToastProvider>
       </body>
     </Html>
   );

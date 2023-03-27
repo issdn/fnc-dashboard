@@ -14,7 +14,7 @@ export default function ToastContainer({
   deleteToast,
 }: {
   toasts: ToastType[];
-  deleteToast: any;
+  deleteToast: (id: string) => void;
 }) {
   return (
     <div className="pointer-events-none fixed top-0 left-0 h-screen w-screen">

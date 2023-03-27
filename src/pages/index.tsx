@@ -1,22 +1,19 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Dashboard from "./components/Dashboard/Dashboard";
-import { ToastProvider } from "./components/Dashboard/Toast/toastContext";
-import ToastContainer from "./components/Dashboard/Toast/ToastContainer";
-import { useToast } from "./components/Dashboard/Toast/hooks";
+import Navigation from "./Navigation";
+import DashboardLayout from "./components/Dashboard/DashboardLayout";
+
 const Home: NextPage = () => {
-  const { toasts, deleteToast, addToast } = useToast();
   return (
     <>
       <Head>
         <title>Dashboard</title>
       </Head>
-      <ToastProvider addToast={addToast}>
-        <main className="p-4 font-mono">
-          <Dashboard />
-        </main>
-        <ToastContainer toasts={toasts} deleteToast={deleteToast} />
-      </ToastProvider>
+
+      <main className="flex flex-row">
+        <Navigation />
+        <DashboardLayout />
+      </main>
     </>
   );
 };

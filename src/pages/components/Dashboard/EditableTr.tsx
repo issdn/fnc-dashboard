@@ -22,7 +22,7 @@ const EditableTr: FC<EditableTrProps> = ({
   const { isOpen, openModal, closeModal } = useModal();
   return (
     <>
-      <tr className={className}>
+      <tr className={`${className}`}>
         {Object.values(category).map((cell, i) => (
           <td key={i}>{cell}</td>
         ))}
@@ -31,20 +31,20 @@ const EditableTr: FC<EditableTrProps> = ({
             <IconButton
               onClick={openModal}
               icon="edit"
-              style="clear"
+              type="clear"
               className={`${className} ${
                 index % 2 === 0
                   ? "rounded-xl bg-neutral-900 text-base text-neutral-100 outline-neutral-100 hover:bg-neutral-800 disabled:bg-neutral-300"
                   : "rounded-xl bg-neutral-800 text-neutral-100 outline-neutral-100 hover:bg-neutral-700 disabled:bg-neutral-300"
               }`}
-              iconClassName="md:text-3xl"
+              iconClassName="text-2xl xl:text-3xl"
             />
             <IconButton
-              style={
+              type={
                 index % 2 === 0 ? "primaryContrast" : "primaryLighterContrast"
               }
               icon="delete_forever"
-              iconClassName="md:text-3xl"
+              iconClassName="text-2xl xl:text-3xl"
             />
           </div>
         </td>

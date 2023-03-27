@@ -5,11 +5,11 @@ import { Formik } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import Input from "./Input";
+import { api } from "~/utils/api";
 
 type CreateCategory = Omit<Category, "id">;
 
 type CategoryFormProps = {
-  onSubmit: (values: CreateCategory) => void;
   initialValues: CreateCategory;
 };
 
@@ -26,17 +26,33 @@ export const categoryValidationSchema = z.object({
   ),
 });
 
-const CategoryForm: FC<CategoryFormProps> = ({ onSubmit, initialValues }) => {
+const CategoryForm: FC<CategoryFormProps> = ({ initialValues }) => {
+  const ctx = api.useContext();
+  const { mutateAsync } = api.category.addCategory.useMutation({
+    onSuccess: async () => {
+      await ctx.category.invalidate();
+    },
+  });
+
   return (
-    <Formik
+    <Formik<Omit<Category, "id">>
       initialValues={initialValues}
       validationSchema={toFormikValidationSchema(categoryValidationSchema)}
-      onSubmit={(values: CreateCategory) => {
-        onSubmit(values);
-      }}
+      onSubmit={async (values, actions) =>
+        mutateAsync(values).then((data) => {
+          actions.resetForm();
+          console.log(data);
+        })
+      }
     >
-      {({ isSubmitting }) => (
-        <form onSubmit={(e) => e.preventDefault()}>
+      {({ isSubmitting, handleSubmit, setSubmitting }) => (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit(e);
+            setSubmitting(false);
+          }}
+        >
           <div className="flex flex-col gap-y-4">
             <Input
               label="Category Name:"
@@ -44,18 +60,16 @@ const CategoryForm: FC<CategoryFormProps> = ({ onSubmit, initialValues }) => {
               name="name"
               placeholder="Category name"
             />
-
             <Input
               label="Treshold:"
               type="text"
               name="monthly_treshold"
               placeholder="Monthly treshold"
             />
-
             <IconButton
-              style="primary"
+              type="primary"
               icon="add"
-              attributes={{ disabled: isSubmitting }}
+              attributes={{ disabled: isSubmitting, type: "submit" }}
               iconClassName="text-3xl"
             />
           </div>

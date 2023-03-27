@@ -4,7 +4,6 @@ import type { FC } from "react";
 
 type InputProps = {
   label: string;
-  isInvalid?: boolean;
 } & JSX.IntrinsicElements["input"] &
   FieldConfig<string>;
 

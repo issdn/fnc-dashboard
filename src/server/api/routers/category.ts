@@ -5,8 +5,8 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 export const categoryRouter = createTRPCRouter({
   addCategory: publicProcedure
     .input(z.object({ name: z.string(), monthly_treshold: z.number() }))
-    .mutation(({ ctx, input }) => {
-      return ctx.prisma.category.create({
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.category.create({
         data: {
           name: input.name.toLowerCase(),
           monthly_treshold: parseFloat(input.monthly_treshold.toPrecision(2)),
@@ -21,8 +21,8 @@ export const categoryRouter = createTRPCRouter({
         monthly_treshold: z.number(),
       })
     )
-    .mutation(({ ctx, input }) => {
-      return ctx.prisma.category.update({
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.category.update({
         where: { id: input.id },
         data: {
           name: input.name.toLowerCase(),
@@ -30,7 +30,7 @@ export const categoryRouter = createTRPCRouter({
         },
       });
     }),
-  getAllCategories: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.category.findMany();
+  getAllCategories: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.category.findMany();
   }),
 });

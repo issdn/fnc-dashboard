@@ -1,6 +1,6 @@
 import type { FC, ReactNode } from "react";
 
-export const styles = {
+export const types = {
   primary:
     "bg-neutral-900 text-neutral-100 rounded-xl hover:bg-neutral-800 disabled:bg-neutral-300 outline-neutral-900",
   primaryLighter:
@@ -12,7 +12,7 @@ export const styles = {
   clear: "",
 } as const;
 
-export type IconButtonStyles = keyof typeof styles;
+export type IconButtonStyles = keyof typeof types;
 
 type IconButtonProps = {
   icon: string;
@@ -20,23 +20,22 @@ type IconButtonProps = {
   children?: ReactNode;
   className?: string;
   iconClassName?: string;
-  style?: IconButtonStyles;
+  type?: IconButtonStyles;
   attributes?: React.ButtonHTMLAttributes<HTMLButtonElement>;
 };
-
 const IconButton: FC<IconButtonProps> = ({
   icon,
   onClick,
   children,
-  attributes,
   className = "",
   iconClassName = "",
-  style = "clear",
+  type = "clear",
+  attributes,
 }) => {
   return (
     <button
       {...attributes}
-      className={`flex flex-row items-center justify-center p-1 outline-offset-2 focus:outline md:px-2 ${className} ${styles[style]}`}
+      className={`flex flex-row items-center justify-center p-1 outline-offset-2 transition-colors duration-300 focus:outline md:px-2 ${className} ${types[type]}`}
       onClick={onClick}
     >
       <span className={`material-icons ${iconClassName}`}>{icon}</span>

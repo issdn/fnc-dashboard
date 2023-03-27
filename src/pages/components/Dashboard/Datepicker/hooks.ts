@@ -4,12 +4,13 @@ import { useState } from "react";
 export const useCalendar = ({
   from = dayjs("2023-01-01"),
   to = dayjs(),
+  format = "YYYY-MM-DD",
 }: {
   from?: dayjs.Dayjs;
   to?: dayjs.Dayjs;
+  format?: string;
 }) => {
   const [_date, _setDate] = useState(to);
-  const format = "YYYY-MM-DD";
 
   const moveYearRight = () => {
     return _date.add(1, "y");
@@ -48,8 +49,12 @@ export const useCalendar = ({
   };
 
   const setDate = (date: string | dayjs.Dayjs) => {
-    _setDate(dayjs(date, format));
+    if (dayjs(date).isAfter(to)) _setDate(to);
+    if (dayjs(date).isBefore(from)) _setDate(from);
+    else _setDate(dayjs(date, format));
   };
+
+  const stringDate = () => _date.format(format);
 
   const reachedMaxDay = (day: number) =>
     _date.set("date", day).diff(to, "date") > 0;
@@ -66,6 +71,7 @@ export const useCalendar = ({
   return {
     date: _date,
     format,
+    stringDate,
     moveYearRight,
     moveYearLeft,
     moveMonthRight,

@@ -56,7 +56,7 @@ const Toast: React.FC<ToastProps> = ({ info, deleteToast }) => {
         >
           <IconButton
             icon="close"
-            style="clear"
+            type="clear"
             className="text-3xl"
             onClick={() => {
               deleteToast(info.id as string);
