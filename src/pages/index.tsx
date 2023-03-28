@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import Navigation from "./Navigation";
-import DashboardLayout from "./components/Dashboard/DashboardLayout";
+import Dashboard from "./dashboard/Dashboard";
 
 const Home: NextPage = () => {
   return (
@@ -12,7 +12,7 @@ const Home: NextPage = () => {
 
       <main className="flex flex-row">
         <Navigation />
-        <DashboardLayout />
+        <Dashboard />
       </main>
     </>
   );

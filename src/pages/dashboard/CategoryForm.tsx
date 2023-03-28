@@ -1,16 +1,24 @@
 import type { FC } from "react";
-import IconButton from "../IconButton";
 import type { Category } from "@prisma/client";
 import { Formik } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import Input from "./Input";
-import { api } from "~/utils/api";
+
+import Input from "~/pages/standard-components/Input";
+import Button from "~/pages/standard-components/Button";
+import type { UseBaseMutationResult } from "@tanstack/react-query";
+import type { CategoryDTO } from "./types";
+import Icon from "../standard-components/Icon";
 
 type CreateCategory = Omit<Category, "id">;
 
 type CategoryFormProps = {
   initialValues: CreateCategory;
+  onSubmit: UseBaseMutationResult<
+    CategoryDTO,
+    unknown,
+    CategoryDTO
+  >["mutateAsync"];
 };
 
 export const categoryValidationSchema = z.object({
@@ -26,22 +34,14 @@ export const categoryValidationSchema = z.object({
   ),
 });
 
-const CategoryForm: FC<CategoryFormProps> = ({ initialValues }) => {
-  const ctx = api.useContext();
-  const { mutateAsync } = api.category.addCategory.useMutation({
-    onSuccess: async () => {
-      await ctx.category.invalidate();
-    },
-  });
-
+const CategoryForm: FC<CategoryFormProps> = ({ initialValues, onSubmit }) => {
   return (
     <Formik<Omit<Category, "id">>
       initialValues={initialValues}
       validationSchema={toFormikValidationSchema(categoryValidationSchema)}
-      onSubmit={async (values, actions) =>
-        mutateAsync(values).then((data) => {
+      onSubmit={(values, actions) =>
+        onSubmit(values).then(() => {
           actions.resetForm();
-          console.log(data);
         })
       }
     >
@@ -66,12 +66,12 @@ const CategoryForm: FC<CategoryFormProps> = ({ initialValues }) => {
               name="monthly_treshold"
               placeholder="Monthly treshold"
             />
-            <IconButton
+            <Button
               type="primary"
-              icon="add"
               attributes={{ disabled: isSubmitting, type: "submit" }}
-              iconClassName="text-3xl"
-            />
+            >
+              <Icon icon="add" className="text-3xl" />
+            </Button>
           </div>
         </form>
       )}

@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import type { ToastType } from "./ToastContainer";
 import { useTimeout } from "../timeout";
-import Icon from "../../Icon";
-import IconButton from "../../IconButton";
+import Icon from "../Icon";
+import Button from "../Button";
 
 const toastStyleTypes = {
   success: {
@@ -54,7 +54,7 @@ const Toast: React.FC<ToastProps> = ({ info, deleteToast }) => {
         <div
           className={` cursor-pointer rounded-xl px-1 text-3xl leading-3 text-neutral-300`}
         >
-          <IconButton
+          <Button
             icon="close"
             type="clear"
             className="text-3xl"

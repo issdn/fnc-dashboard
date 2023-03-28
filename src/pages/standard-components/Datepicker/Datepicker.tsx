@@ -7,10 +7,10 @@ import {
   useState,
 } from "react";
 import { FieldConfig, useField } from "formik";
-import IconButton from "../../IconButton";
 import { useVisibility } from "../hooks";
 import { useCalendar } from "./hooks";
 import { handleKeyDownSelection, handleMouseSelection } from "./functions";
+import Button from "../Button";
 
 type DatepickerProps = {
   calendar: ReturnType<typeof useCalendar>;
@@ -79,7 +79,7 @@ const Datepicker: FC<DatepickerProps> = ({ calendar, ...props }) => {
           value={calendar.date.format(calendar.format).toString()}
           className="h-full w-full whitespace-nowrap break-keep rounded-xl border-2 border-neutral-900 bg-neutral-100 py-3 text-center font-bold text-neutral-900 outline-none transition-colors duration-300 hover:border-neutral-500 focus:border-blue-600"
         ></input>
-        <IconButton
+        <Button
           onClick={toggleVisibility}
           icon="calendar_month"
           className="absolute right-2 flex flex-row items-center gap-x-2 rounded-xl px-4 enabled:hover:bg-neutral-900/10 disabled:cursor-default disabled:text-neutral-700"
@@ -91,7 +91,7 @@ const Datepicker: FC<DatepickerProps> = ({ calendar, ...props }) => {
           {!isVisible ? null : (
             <div className="flex w-full flex-col items-center gap-y-3 rounded-xl bg-neutral-900 py-2 px-1">
               <div className="flex w-[70%] flex-row items-center justify-between">
-                <IconButton
+                <Button
                   icon="chevron_left"
                   className="h-fit rounded-full enabled:hover:bg-neutral-700 disabled:cursor-default disabled:text-neutral-500"
                   onClick={() => calendar.setDate(calendar.moveMonthLeft())}
@@ -108,7 +108,7 @@ const Datepicker: FC<DatepickerProps> = ({ calendar, ...props }) => {
                   </p>
                   <p className=" -mt-2">{calendar.date.year()}</p>
                 </div>
-                <IconButton
+                <Button
                   icon="chevron_right"
                   className="disabled:hover-none h-fit rounded-full enabled:hover:bg-neutral-700 disabled:cursor-default disabled:text-neutral-500"
                   onClick={() => calendar.setDate(calendar.moveMonthRight())}

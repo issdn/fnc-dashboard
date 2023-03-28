@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 import { createPortal } from "react-dom";
-import IconButton from "../../IconButton";
+import Button from "../Button";
+import Icon from "../Icon";
 
 type ModalProps = {
   children?: React.ReactNode;
@@ -25,15 +26,15 @@ export const useModal = () => {
 const Modal: FC<ModalProps> = ({ children, closeModal, isOpen }) => {
   const ModalPortal = () => {
     return (
-      <div className="absolute top-0 left-0 flex h-screen w-screen flex-col items-center justify-center bg-black/70 px-8">
+      <div className="absolute top-0 left-0 z-[9999] flex h-screen w-screen flex-col items-center justify-center bg-black/70 px-8">
         <div className="flex min-h-[25%] w-full animate-scaleY flex-col items-center justify-start gap-y-2 rounded-2xl bg-white p-4 md:w-fit">
           <div className="flex h-fit w-full flex-row justify-end">
-            <IconButton
-              onClick={closeModal}
-              icon="close"
-              className="rounded-xl"
-              iconClassName="text-neutral-400 hover:text-neutral-500"
-            />
+            <Button onClick={closeModal} className="rounded-xl">
+              <Icon
+                className="text-neutral-400 hover:text-neutral-500"
+                icon="close"
+              />
+            </Button>
           </div>
           {children}
         </div>

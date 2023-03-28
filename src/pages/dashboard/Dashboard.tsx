@@ -3,9 +3,15 @@ import CategoryForm from "./CategoryForm";
 import Table from "./Table";
 import { api } from "~/utils/api";
 import ExpenseForm from "./ExpenseForm";
-import { useCalendar } from "./Datepicker/hooks";
+import { useCalendar } from "../standard-components/Datepicker/hooks";
 
-const DashboardLayout: FC = () => {
+const Dashboard: FC = () => {
+  const ctx = api.useContext();
+  const { mutateAsync } = api.category.add.useMutation({
+    onSuccess: async () => {
+      await ctx.category.invalidate();
+    },
+  });
   const { mutate: mutateExpense } = api.expense.addExpense.useMutation();
   const calendar = useCalendar({});
   return (
@@ -24,7 +30,10 @@ const DashboardLayout: FC = () => {
           />
         </div>
         <div className="rounded-2xl border-2 border-neutral-900 p-4 md:p-8">
-          <CategoryForm initialValues={{ name: "", monthly_treshold: 0 }} />
+          <CategoryForm
+            onSubmit={mutateAsync}
+            initialValues={{ name: "", monthly_treshold: 0 }}
+          />
         </div>
         <Table />
       </div>
@@ -32,4 +41,4 @@ const DashboardLayout: FC = () => {
   );
 };
 
-export default DashboardLayout;
+export default Dashboard;

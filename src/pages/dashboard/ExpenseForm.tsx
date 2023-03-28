@@ -1,12 +1,13 @@
 import type { FC } from "react";
-import IconButton from "../IconButton";
+
 import type { Expense } from "@prisma/client";
 import { ErrorMessage, Field, Formik } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import Datepicker from "./Datepicker/Datepicker";
-import type { useCalendar } from "./Datepicker/hooks";
-
+import type { useCalendar } from "../standard-components/Datepicker/hooks";
+import Datepicker from "../standard-components/Datepicker/Datepicker";
+import Button from "../standard-components/Button";
+import Icon from "../standard-components/Icon";
 type CreateExpense = Omit<Expense, "id">;
 
 type ExpenseFormProps = {
@@ -70,12 +71,9 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
               />
             </div>
             <Datepicker name="date" calendar={calendar} />
-            <IconButton
-              type="primary"
-              icon="add"
-              attributes={{ disabled: isSubmitting }}
-              iconClassName="text-3xl"
-            />
+            <Button type="primary" attributes={{ disabled: isSubmitting }}>
+              <Icon className="text-3xl" icon="add" />
+            </Button>
           </div>
         </form>
       )}

@@ -1,8 +1,8 @@
 import type { DocumentType } from "next/dist/shared/lib/utils";
 import { Head, Html, Main, NextScript } from "next/document";
-import { useToast } from "./components/Dashboard/Toast/hooks";
-import { ToastProvider } from "./components/Dashboard/Toast/toastContext";
-import ToastContainer from "./components/Dashboard/Toast/ToastContainer";
+import { useToast } from "./standard-components/Toast/hooks";
+import { ToastProvider } from "./standard-components/Toast/toastContext";
+import ToastContainer from "./standard-components/Toast/ToastContainer";
 
 const Document: DocumentType = () => {
   const { toasts, deleteToast, addToast } = useToast();

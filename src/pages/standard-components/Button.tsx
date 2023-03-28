@@ -12,37 +12,31 @@ export const types = {
   clear: "",
 } as const;
 
-export type IconButtonStyles = keyof typeof types;
+export type ButtonStyles = keyof typeof types;
 
-type IconButtonProps = {
-  icon: string;
-  onClick?: () => void;
+type ButtonProps = {
+  onClick?: () => unknown;
   children?: ReactNode;
   className?: string;
-  iconClassName?: string;
-  type?: IconButtonStyles;
+  type?: ButtonStyles;
   attributes?: React.ButtonHTMLAttributes<HTMLButtonElement>;
 };
-const IconButton: FC<IconButtonProps> = ({
-  icon,
+const Button: FC<ButtonProps> = ({
   onClick,
   children,
   className = "",
-  iconClassName = "",
   type = "clear",
   attributes,
 }) => {
   return (
     <button
       {...attributes}
-      className={`flex flex-row items-center justify-center p-1 outline-offset-2 transition-colors duration-300 focus:outline md:px-2 ${className} ${types[type]}`}
+      className={`flex flex-row items-center justify-center whitespace-nowrap py-1 px-2 outline-offset-2 transition-colors duration-300 focus:outline md:px-2 ${className} ${types[type]}`}
       onClick={onClick}
     >
-      <span className={`material-icons ${iconClassName}`}>{icon}</span>
-
       {children}
     </button>
   );
 };
 
-export default IconButton;
+export default Button;

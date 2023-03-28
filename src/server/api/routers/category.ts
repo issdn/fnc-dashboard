@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const categoryRouter = createTRPCRouter({
-  addCategory: publicProcedure
+  add: publicProcedure
     .input(z.object({ name: z.string(), monthly_treshold: z.number() }))
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.category.create({
@@ -13,7 +13,7 @@ export const categoryRouter = createTRPCRouter({
         },
       });
     }),
-  editCategory: publicProcedure
+  edit: publicProcedure
     .input(
       z.object({
         id: z.string(),
@@ -30,7 +30,14 @@ export const categoryRouter = createTRPCRouter({
         },
       });
     }),
-  getAllCategories: publicProcedure.query(async ({ ctx }) => {
+  getAll: publicProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.category.findMany();
   }),
+  delete: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.category.delete({
+        where: { id: input.id },
+      });
+    }),
 });

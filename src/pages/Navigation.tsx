@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { FC, useState } from "react";
-import Icon from "./components/Icon";
+import Icon from "./standard-components/Icon";
 import { links } from "./links";
-import IconButton from "./components/IconButton";
+import Button from "./standard-components/Button";
 
 const Navigation: FC = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -12,7 +12,7 @@ const Navigation: FC = () => {
         isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
       } fixed z-[999] h-screen w-3/4 bg-neutral-900 px-12 py-16 text-xl text-neutral-100 transition-all duration-500 after:text-neutral-100 md:relative md:w-fit`}
     >
-      <IconButton
+      <Button
         onClick={() => setIsOpen(!isOpen)}
         icon="chevron_right"
         className="clip absolute left-[96%] top-8 bg-neutral-900 md:hidden"
