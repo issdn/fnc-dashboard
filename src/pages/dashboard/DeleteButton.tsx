@@ -26,13 +26,17 @@ const DeleteButton: FC<DeleteButtonProps> = ({
         <Icon icon="delete_forever" className="text-2xl xl:text-3xl" />
       </Button>
       <Modal isOpen={isOpen} closeModal={closeModal}>
-        {deleteModalContent}
-        <div className="flex w-full flex-row gap-x-2">
-          <Button type="primary" className="w-full">
-            <Icon className="w-fit" icon="delete_permamently" />
-            Delete Permamently
-          </Button>
-          <Button onClick={closeModal}>Cancel</Button>
+        <div className="flex flex-col gap-y-8">
+          {deleteModalContent}
+          <div className="flex w-full flex-row gap-x-8">
+            <Button type="primary">
+              <Icon icon="delete_forever" />
+              Delete Permamently
+            </Button>
+            <Button type="secondary" onClick={closeModal}>
+              Cancel
+            </Button>
+          </div>
         </div>
       </Modal>
     </>

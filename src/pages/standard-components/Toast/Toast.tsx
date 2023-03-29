@@ -55,13 +55,14 @@ const Toast: React.FC<ToastProps> = ({ info, deleteToast }) => {
           className={` cursor-pointer rounded-xl px-1 text-3xl leading-3 text-neutral-300`}
         >
           <Button
-            icon="close"
             type="clear"
             className="text-3xl"
             onClick={() => {
               deleteToast(info.id as string);
             }}
-          />
+          >
+            <Icon icon="close" />
+          </Button>
         </div>
       </div>
     </div>

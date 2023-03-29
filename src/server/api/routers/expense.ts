@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const expenseRouter = createTRPCRouter({
-  addExpense: publicProcedure
+  add: publicProcedure
     .input(
       z.object({
         amount: z.number().positive(),
@@ -13,7 +13,7 @@ export const expenseRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      await ctx.prisma.expense.create({
+      return await ctx.prisma.expense.create({
         data: {
           amount: input.amount,
           category_name: input.category_name,
@@ -22,7 +22,7 @@ export const expenseRouter = createTRPCRouter({
         },
       });
     }),
-  editExpense: publicProcedure
+  edit: publicProcedure
     .input(
       z.object({
         id: z.string(),
@@ -33,7 +33,7 @@ export const expenseRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      await ctx.prisma.expense.update({
+      return await ctx.prisma.expense.update({
         where: {
           id: input.id,
         },
@@ -45,15 +45,13 @@ export const expenseRouter = createTRPCRouter({
         },
       });
     }),
-  getAllExpenses: publicProcedure
-    .input(z.object({}))
-    .query(async ({ ctx, input }) => {
-      await ctx.prisma.expense.findMany();
-    }),
-  deleteExpense: publicProcedure
+  getAll: publicProcedure.input(z.object({})).query(async ({ ctx, input }) => {
+    return await ctx.prisma.expense.findMany();
+  }),
+  delete: publicProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      await ctx.prisma.expense.delete({
+      return await ctx.prisma.expense.delete({
         where: {
           id: input.id,
         },

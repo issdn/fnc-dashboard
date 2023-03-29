@@ -2,13 +2,13 @@ import type { FC } from "react";
 import { api } from "~/utils/api";
 import EditableTr from "./EditableTr";
 import { useToastContext } from "../standard-components/Toast/toastContext";
-import CategoryForm from "./CategoryForm";
 import EditButton from "./EditButton";
 import DeleteButton from "./DeleteButton";
+import CategoryForm from "./CategoryForm";
 import Icon from "../standard-components/Icon";
-import Button from "../standard-components/Button";
 
 const Table: FC = () => {
+  const ctx = api.useContext();
   const result = api.category.getAll.useQuery();
   const { addToast } = useToastContext();
 
@@ -62,12 +62,24 @@ const Table: FC = () => {
               "
             >
               <EditButton
+                className={`${
+                  index % 2 === 0
+                    ? "rounded-xl text-base text-neutral-100 outline-neutral-100 hover:bg-neutral-800 disabled:bg-neutral-300"
+                    : "rounded-xl bg-neutral-800 text-neutral-100 outline-neutral-100 hover:bg-neutral-700 disabled:bg-neutral-300"
+                }`}
                 editForm={
                   <CategoryForm
+                    submitButtonContent={
+                      <Icon icon="edit" className="text-3xl" />
+                    }
                     onSubmit={(newValues) =>
-                      api.category.edit
-                        .useMutation()
-                        .mutateAsync({ id: category.id, ...newValues })
+                      api.category.edit.useMutation().mutateAsync({
+                        id: category.id,
+                        ...(newValues as {
+                          name: string;
+                          monthly_treshold: number;
+                        }),
+                      })
                     }
                     initialValues={{
                       name: category.name,
@@ -75,16 +87,18 @@ const Table: FC = () => {
                     }}
                   />
                 }
+              />
+              <DeleteButton
                 className={`${
                   index % 2 === 0
                     ? "rounded-xl bg-neutral-900 text-base text-neutral-100 outline-neutral-100 hover:bg-neutral-800 disabled:bg-neutral-300"
                     : "rounded-xl bg-neutral-800 text-neutral-100 outline-neutral-100 hover:bg-neutral-700 disabled:bg-neutral-300"
                 }`}
-              />
-              <DeleteButton
                 onDelete={async () => {
                   await api.category.delete
-                    .useMutation()
+                    .useMutation({
+                      onSuccess: async () => await ctx.category.invalidate(),
+                    })
                     .mutateAsync({ id: category.id })
                     .then(() =>
                       addToast({
@@ -100,16 +114,11 @@ const Table: FC = () => {
                     );
                 }}
                 deleteModalContent={
-                  <h1>
-                    Are you sure you want to delete &quot;{category.name}
-                    &quot; category?
+                  <h1 className="text-center">
+                    Are you sure you want to delete <br />
+                    <strong>{category.name}</strong> category?
                   </h1>
                 }
-                className={`${
-                  index % 2 === 0
-                    ? "rounded-xl bg-neutral-900 text-base text-neutral-100 outline-neutral-100 hover:bg-neutral-800 disabled:bg-neutral-300"
-                    : "rounded-xl bg-neutral-800 text-neutral-100 outline-neutral-100 hover:bg-neutral-700 disabled:bg-neutral-300"
-                }`}
               />
             </EditableTr>
           ))}

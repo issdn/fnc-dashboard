@@ -27,7 +27,7 @@ const Modal: FC<ModalProps> = ({ children, closeModal, isOpen }) => {
   const ModalPortal = () => {
     return (
       <div className="absolute top-0 left-0 z-[9999] flex h-screen w-screen flex-col items-center justify-center bg-black/70 px-8">
-        <div className="flex min-h-[25%] w-full animate-scaleY flex-col items-center justify-start gap-y-2 rounded-2xl bg-white p-4 md:w-fit">
+        <div className="flex w-full animate-scaleY flex-col items-center justify-start gap-y-2 rounded-2xl bg-white p-4 md:w-fit md:max-w-[500px]">
           <div className="flex h-fit w-full flex-row justify-end">
             <Button onClick={closeModal} className="rounded-xl">
               <Icon

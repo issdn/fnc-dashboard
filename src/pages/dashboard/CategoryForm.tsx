@@ -1,25 +1,13 @@
-import type { FC } from "react";
-import type { Category } from "@prisma/client";
-import { Formik } from "formik";
 import { z } from "zod";
-import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import Input from "~/pages/standard-components/Input";
-import Button from "~/pages/standard-components/Button";
-import type { UseBaseMutationResult } from "@tanstack/react-query";
 import type { CategoryDTO } from "./types";
-import Icon from "../standard-components/Icon";
+import Form, { FormProps } from "./Form";
 
-type CreateCategory = Omit<Category, "id">;
-
-type CategoryFormProps = {
-  initialValues: CreateCategory;
-  onSubmit: UseBaseMutationResult<
-    CategoryDTO,
-    unknown,
-    CategoryDTO
-  >["mutateAsync"];
-};
+type CategoryFormProps<T extends CategoryDTO> = Omit<
+  FormProps<T>,
+  "children" | "validationSchema"
+>;
 
 export const categoryValidationSchema = z.object({
   name: z
@@ -34,48 +22,31 @@ export const categoryValidationSchema = z.object({
   ),
 });
 
-const CategoryForm: FC<CategoryFormProps> = ({ initialValues, onSubmit }) => {
+const CategoryForm = <T extends CategoryDTO>({
+  initialValues,
+  onSubmit,
+  submitButtonContent,
+}: CategoryFormProps<T>) => {
   return (
-    <Formik<Omit<Category, "id">>
+    <Form
       initialValues={initialValues}
-      validationSchema={toFormikValidationSchema(categoryValidationSchema)}
-      onSubmit={(values, actions) =>
-        onSubmit(values).then(() => {
-          actions.resetForm();
-        })
-      }
+      onSubmit={onSubmit}
+      validationSchema={categoryValidationSchema}
+      submitButtonContent={submitButtonContent}
     >
-      {({ isSubmitting, handleSubmit, setSubmitting }) => (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit(e);
-            setSubmitting(false);
-          }}
-        >
-          <div className="flex flex-col gap-y-4">
-            <Input
-              label="Category Name:"
-              type="text"
-              name="name"
-              placeholder="Category name"
-            />
-            <Input
-              label="Treshold:"
-              type="text"
-              name="monthly_treshold"
-              placeholder="Monthly treshold"
-            />
-            <Button
-              type="primary"
-              attributes={{ disabled: isSubmitting, type: "submit" }}
-            >
-              <Icon icon="add" className="text-3xl" />
-            </Button>
-          </div>
-        </form>
-      )}
-    </Formik>
+      <Input
+        label="Category Name:"
+        type="text"
+        name="name"
+        placeholder="Category name"
+      />
+      <Input
+        label="Treshold:"
+        type="text"
+        name="monthly_treshold"
+        placeholder="Monthly treshold"
+      />
+    </Form>
   );
 };
 

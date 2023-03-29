@@ -1,11 +1,26 @@
+import { PrismaClient } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
+const findCategory = async (prismaClient: PrismaClient, name: string) =>
+  await prismaClient.category.findUnique({
+    where: { name: name.toLowerCase() },
+  });
+
+// TODO: Catch necessary errors
 export const categoryRouter = createTRPCRouter({
   add: publicProcedure
     .input(z.object({ name: z.string(), monthly_treshold: z.number() }))
     .mutation(async ({ ctx, input }) => {
+      const category = await findCategory(ctx.prisma, input.name);
+      if (category) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "Category already exists",
+        });
+      }
       return await ctx.prisma.category.create({
         data: {
           name: input.name.toLowerCase(),
