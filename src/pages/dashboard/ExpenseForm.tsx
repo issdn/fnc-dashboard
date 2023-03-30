@@ -1,10 +1,11 @@
 import { z } from "zod";
 
-import Input from "~/pages/standard-components/Input";
+import Input from "~/pages/StandardComponents/Input";
 import Form from "./Form";
 import type { FormProps } from "./Form";
 import type { Expense } from "@prisma/client";
-import type { useCalendar } from "../standard-components/Datepicker/hooks";
+import { useCalendar } from "../StandardComponents/Datepicker/hooks";
+import Datepicker from "../StandardComponents/Datepicker/Datepicker";
 
 type ExpenseDTO = Omit<Expense, "id">;
 
@@ -14,16 +15,15 @@ type ExpenseFormProps<T extends ExpenseDTO> = Omit<
 > & { calendar: ReturnType<typeof useCalendar> };
 
 export const categoryValidationSchema = z.object({
-  name: z
-    .string({ required_error: "Category name is required." })
-    .min(1, { message: "Name must be at least 1 character long." })
-    .regex(/^[a-zA-Z\s]*$/, { message: "Only letters are allowed." }),
-  monthly_treshold: z.preprocess(
+  name: z.string().optional(),
+  amount: z.preprocess(
     (v) => Number(v),
     z
       .number({ invalid_type_error: "Threshold must be a positive number." })
       .nonnegative()
   ),
+  category_name: z.string(),
+  date: z.date(),
 });
 
 const CategoryForm = <T extends ExpenseDTO>({
@@ -31,6 +31,8 @@ const CategoryForm = <T extends ExpenseDTO>({
   onSubmit,
   submitButtonContent,
 }: ExpenseFormProps<T>) => {
+  const calendar = useCalendar({});
+
   return (
     <Form
       initialValues={initialValues}
@@ -39,17 +41,25 @@ const CategoryForm = <T extends ExpenseDTO>({
       submitButtonContent={submitButtonContent}
     >
       <Input
-        label="Category Name:"
+        label="Expense name:"
         type="text"
         name="name"
-        placeholder="Category name"
+        placeholder="Expense name"
       />
       <Input
-        label="Treshold:"
+        label="Amount:"
         type="text"
-        name="monthly_treshold"
+        name="amount"
         placeholder="Monthly treshold"
       />
+      <Input
+        label="Category:"
+        type="text"
+        name="category_name"
+        placeholder="Category"
+      />
+
+      <Datepicker name="date" calendar={calendar} />
     </Form>
   );
 };

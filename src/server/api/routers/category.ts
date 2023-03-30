@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import type { PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -18,7 +18,7 @@ export const categoryRouter = createTRPCRouter({
       if (category) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: "Category already exists",
+          message: "Category with this name already exists.",
         });
       }
       return await ctx.prisma.category.create({
@@ -37,6 +37,13 @@ export const categoryRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      const category = await findCategory(ctx.prisma, input.name);
+      if (category) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "Category with this name already exists.",
+        });
+      }
       return await ctx.prisma.category.update({
         where: { id: input.id },
         data: {

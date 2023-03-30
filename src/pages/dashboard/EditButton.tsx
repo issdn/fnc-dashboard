@@ -1,7 +1,7 @@
 import type { FC, ReactNode } from "react";
-import Modal, { useModal } from "../standard-components/Modal/Modal";
-import Button from "../standard-components/Button";
-import Icon from "../standard-components/Icon";
+import Modal, { useModal } from "../StandardComponents/Modal/Modal";
+import Button from "../StandardComponents/Button";
+import Icon from "../StandardComponents/Icon";
 type EditButtonProps = {
   className?: string;
   editForm: ReactNode;

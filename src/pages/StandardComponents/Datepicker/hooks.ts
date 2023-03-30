@@ -50,7 +50,7 @@ export const useCalendar = ({
 
   const setDate = (date: string | dayjs.Dayjs) => {
     if (dayjs(date).isAfter(to)) _setDate(to);
-    if (dayjs(date).isBefore(from)) _setDate(from);
+    else if (dayjs(date).isBefore(from)) _setDate(from);
     else _setDate(dayjs(date, format));
   };
 

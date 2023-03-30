@@ -9,8 +9,12 @@ import {
 import { FieldConfig, useField } from "formik";
 import { useVisibility } from "../hooks";
 import { useCalendar } from "./hooks";
-import { handleKeyDownSelection, handleMouseSelection } from "./functions";
+import {
+  handleKeyDownSelection,
+  handleMouseSelection,
+} from "./datepicker_functions";
 import Button from "../Button";
+import Icon from "../Icon";
 
 type DatepickerProps = {
   calendar: ReturnType<typeof useCalendar>;
@@ -81,10 +85,10 @@ const Datepicker: FC<DatepickerProps> = ({ calendar, ...props }) => {
         ></input>
         <Button
           onClick={toggleVisibility}
-          icon="calendar_month"
           className="absolute right-2 flex flex-row items-center gap-x-2 rounded-xl px-4 enabled:hover:bg-neutral-900/10 disabled:cursor-default disabled:text-neutral-700"
-          iconClassName="my-0.5 text-neutral-900"
-        />
+        >
+          <Icon className="my-0.5 text-neutral-900" icon="calendar_month" />
+        </Button>
       </div>
       <div className="relative w-full">
         <div className="absolute z-50 w-full">
@@ -92,7 +96,6 @@ const Datepicker: FC<DatepickerProps> = ({ calendar, ...props }) => {
             <div className="flex w-full flex-col items-center gap-y-3 rounded-xl bg-neutral-900 py-2 px-1">
               <div className="flex w-[70%] flex-row items-center justify-between">
                 <Button
-                  icon="chevron_left"
                   className="h-fit rounded-full enabled:hover:bg-neutral-700 disabled:cursor-default disabled:text-neutral-500"
                   onClick={() => calendar.setDate(calendar.moveMonthLeft())}
                   attributes={{
@@ -100,8 +103,9 @@ const Datepicker: FC<DatepickerProps> = ({ calendar, ...props }) => {
                       calendar.date.month() - 2
                     ),
                   }}
-                  iconClassName="text-2xl mx-1 md:mx-0"
-                />
+                >
+                  <Icon className="mx-1 text-2xl md:mx-0" icon="chevron_left" />{" "}
+                </Button>
                 <div className="flex flex-col items-center">
                   <p className=" text-xl font-bold">
                     {MONTH_NAMES[calendar.date.month()]}
@@ -109,7 +113,6 @@ const Datepicker: FC<DatepickerProps> = ({ calendar, ...props }) => {
                   <p className=" -mt-2">{calendar.date.year()}</p>
                 </div>
                 <Button
-                  icon="chevron_right"
                   className="disabled:hover-none h-fit rounded-full enabled:hover:bg-neutral-700 disabled:cursor-default disabled:text-neutral-500"
                   onClick={() => calendar.setDate(calendar.moveMonthRight())}
                   attributes={{
@@ -117,8 +120,12 @@ const Datepicker: FC<DatepickerProps> = ({ calendar, ...props }) => {
                       calendar.date.month() + 2
                     ),
                   }}
-                  iconClassName="text-2xl mx-1 md:mx-0"
-                />
+                >
+                  <Icon
+                    className="mx-1 text-2xl md:mx-0"
+                    icon="chevron_right"
+                  />{" "}
+                </Button>
               </div>
               <div className="w-full px-2">
                 <div className="w-full border-t border-white" />

@@ -1,21 +1,16 @@
 import type { FC, ReactNode } from "react";
-import Modal, { useModal } from "../standard-components/Modal/Modal";
-import Icon from "../standard-components/Icon";
-import { UseBaseMutationResult } from "@tanstack/react-query";
-import Button from "../standard-components/Button";
+import Modal, { useModal } from "../StandardComponents/Modal/Modal";
+import Icon from "../StandardComponents/Icon";
+import Button from "../StandardComponents/Button";
 
 type DeleteButtonProps = {
   deleteModalContent: ReactNode;
   className?: string;
-  onDelete: UseBaseMutationResult<
-    unknown,
-    unknown,
-    Record<string, string | number | boolean>,
-    unknown
-  >["mutateAsync"];
+  onDelete: () => Promise<void>;
 };
 
 const DeleteButton: FC<DeleteButtonProps> = ({
+  onDelete,
   deleteModalContent,
   className = "",
 }) => {
@@ -29,7 +24,10 @@ const DeleteButton: FC<DeleteButtonProps> = ({
         <div className="flex flex-col gap-y-8">
           {deleteModalContent}
           <div className="flex w-full flex-row gap-x-8">
-            <Button type="primary">
+            <Button
+              onClick={async () => await onDelete().then(() => closeModal())}
+              type="primary"
+            >
               <Icon icon="delete_forever" />
               Delete Permamently
             </Button>

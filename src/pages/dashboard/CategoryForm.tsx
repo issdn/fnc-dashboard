@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import Input from "~/pages/standard-components/Input";
+import Input from "~/pages/StandardComponents/Input";
 import type { CategoryDTO } from "./types";
 import Form, { FormProps } from "./Form";
 

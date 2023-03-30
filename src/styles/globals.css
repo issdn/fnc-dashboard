@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer utilities{
+    .input-util{
+      @apply hover:outline-neutral-600 transition-all duration-300 outline-none focus:outline-2 focus:outline-neutral-200 invalid:focus:outline-red-500;
+    }
+
     .clip{
       clip-path: polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%);
     }
@@ -63,5 +67,14 @@
     }
     .input-invalid{
       @apply border-red-500 outline-red-500
+    }
+  }
+
+  @layer base{
+    html, body, #__next {
+      height: 100%;
+    }
+    *{
+      box-sizing: border-box;
     }
   }

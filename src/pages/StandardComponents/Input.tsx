@@ -3,14 +3,15 @@ import { useField } from "formik";
 import type { FC } from "react";
 
 type InputProps = {
+  className?: string;
   label: string;
 } & JSX.IntrinsicElements["input"] &
   FieldConfig<string>;
 
-const Input: FC<InputProps> = ({ label, ...props }) => {
+const Input: FC<InputProps> = ({ label, className = "", ...props }) => {
   const [field, meta] = useField(props);
   return (
-    <div className="flex flex-col gap-y-2">
+    <div className={`flex flex-col gap-y-2 ${className}`}>
       <label>{label}</label>
       <input
         className={`${
