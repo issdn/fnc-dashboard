@@ -6,8 +6,8 @@ export const expenseRouter = createTRPCRouter({
   add: publicProcedure
     .input(
       z.object({
-        amount: z.number().positive(),
-        category_name: z.string().min(1),
+        amount: z.number().nonnegative(),
+        category_name: z.string().min(1).optional(),
         name: z.string(),
         date: z.date(),
       })
@@ -16,7 +16,7 @@ export const expenseRouter = createTRPCRouter({
       return await ctx.prisma.expense.create({
         data: {
           amount: input.amount,
-          category_name: input.category_name,
+          category_name: input.category_name || "",
           name: input.name,
           date: input.date,
         },
@@ -26,7 +26,7 @@ export const expenseRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
-        amount: z.number().positive(),
+        amount: z.number().nonnegative(),
         category_name: z.string().min(1),
         name: z.string(),
         date: z.date(),
@@ -45,7 +45,7 @@ export const expenseRouter = createTRPCRouter({
         },
       });
     }),
-  getAll: publicProcedure.input(z.object({})).query(async ({ ctx, input }) => {
+  getAll: publicProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.expense.findMany();
   }),
   delete: publicProcedure

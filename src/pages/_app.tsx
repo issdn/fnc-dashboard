@@ -9,6 +9,7 @@ import { useToast } from "./StandardComponents/Toast/hooks";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const { toasts, deleteToast, addToast } = useToast();
+
   return (
     <ToastProvider addToast={addToast}>
       <Component {...pageProps} />

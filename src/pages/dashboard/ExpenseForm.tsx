@@ -3,7 +3,7 @@ import { z } from "zod";
 import Input from "~/pages/StandardComponents/Input";
 import Form from "./Form";
 import type { FormProps } from "./Form";
-import type { Expense } from "@prisma/client";
+import type { Category, Expense } from "@prisma/client";
 import { useCalendar } from "../StandardComponents/Datepicker/hooks";
 import Datepicker from "../StandardComponents/Datepicker/Datepicker";
 
@@ -12,17 +12,16 @@ type ExpenseDTO = Omit<Expense, "id">;
 type ExpenseFormProps<T extends ExpenseDTO> = Omit<
   FormProps<T>,
   "children" | "validationSchema"
-> & { calendar: ReturnType<typeof useCalendar> };
+> & { calendar: ReturnType<typeof useCalendar>; selectedTr: Category | null };
 
-export const categoryValidationSchema = z.object({
+export const validationSchema = z.object({
   name: z.string().optional(),
   amount: z.preprocess(
     (v) => Number(v),
     z
-      .number({ invalid_type_error: "Threshold must be a positive number." })
+      .number({ invalid_type_error: "Amount must be a positive number." })
       .nonnegative()
   ),
-  category_name: z.string(),
   date: z.date(),
 });
 
@@ -30,6 +29,7 @@ const CategoryForm = <T extends ExpenseDTO>({
   initialValues,
   onSubmit,
   submitButtonContent,
+  selectedTr,
 }: ExpenseFormProps<T>) => {
   const calendar = useCalendar({});
 
@@ -37,7 +37,7 @@ const CategoryForm = <T extends ExpenseDTO>({
     <Form
       initialValues={initialValues}
       onSubmit={onSubmit}
-      validationSchema={categoryValidationSchema}
+      validationSchema={validationSchema}
       submitButtonContent={submitButtonContent}
     >
       <Input
@@ -46,19 +46,10 @@ const CategoryForm = <T extends ExpenseDTO>({
         name="name"
         placeholder="Expense name"
       />
-      <Input
-        label="Amount:"
-        type="text"
-        name="amount"
-        placeholder="Monthly treshold"
-      />
-      <Input
-        label="Category:"
-        type="text"
-        name="category_name"
-        placeholder="Category"
-      />
-
+      <Input label="Amount:" type="text" name="amount" placeholder="Amount" />
+      <p className="text-2">
+        Category: <b className="break-all">{selectedTr?.name || "---"}</b>
+      </p>
       <Datepicker name="date" calendar={calendar} />
     </Form>
   );

@@ -12,9 +12,11 @@ const findCategory = async (prismaClient: PrismaClient, name: string) =>
 // TODO: Catch necessary errors
 export const categoryRouter = createTRPCRouter({
   add: publicProcedure
-    .input(z.object({ name: z.string(), monthly_treshold: z.number() }))
+    .input(
+      z.object({ name: z.string(), monthly_treshold: z.number().nonnegative() })
+    )
     .mutation(async ({ ctx, input }) => {
-      const category = await findCategory(ctx.prisma, input.name);
+      const category = await findCategory(ctx.prisma, input.name || "");
       if (category) {
         throw new TRPCError({
           code: "CONFLICT",
@@ -23,8 +25,8 @@ export const categoryRouter = createTRPCRouter({
       }
       return await ctx.prisma.category.create({
         data: {
-          name: input.name.toLowerCase(),
-          monthly_treshold: parseFloat(input.monthly_treshold.toPrecision(2)),
+          name: (input.name || "").toLowerCase(),
+          monthly_treshold: input.monthly_treshold,
         },
       });
     }),

@@ -9,7 +9,7 @@ type CategoryFormProps<T extends CategoryDTO> = Omit<
   "children" | "validationSchema"
 >;
 
-export const categoryValidationSchema = z.object({
+export const validationSchema = z.object({
   name: z
     .string({ required_error: "Category name is required." })
     .min(1, { message: "Name must be at least 1 character long." })
@@ -26,13 +26,19 @@ const CategoryForm = <T extends CategoryDTO>({
   initialValues,
   onSubmit,
   submitButtonContent,
+  successMessage,
+  errorMessage,
+  successCallback,
 }: CategoryFormProps<T>) => {
   return (
     <Form
       initialValues={initialValues}
       onSubmit={onSubmit}
-      validationSchema={categoryValidationSchema}
+      validationSchema={validationSchema}
       submitButtonContent={submitButtonContent}
+      successMessage={successMessage}
+      errorMessage={errorMessage}
+      successCallback={successCallback}
     >
       <Input
         label="Category Name:"

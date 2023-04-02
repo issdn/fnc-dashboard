@@ -4,14 +4,19 @@ import type { FormikValues } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import Button from "../StandardComponents/Button";
 import type { UseMutateAsyncFunction } from "@tanstack/react-query";
+import { useToastContext } from "../StandardComponents/Toast/toastContext";
+import { TRPCError } from "@trpc/server";
+import Spinner from "../StandardComponents/Spinner";
 
 export type FormProps<T extends FormikValues> = {
   initialValues: T;
   onSubmit: UseMutateAsyncFunction<T | void, unknown, T, unknown>;
-
   validationSchema: z.ZodSchema;
   children: React.ReactNode;
   submitButtonContent: React.ReactNode | string;
+  errorMessage?: string;
+  successMessage?: string;
+  successCallback?: () => void;
 };
 
 const Form = <T extends FormikValues>({
@@ -20,7 +25,11 @@ const Form = <T extends FormikValues>({
   validationSchema,
   children,
   submitButtonContent,
+  errorMessage = "Something went wrong",
+  successMessage = "Success",
+  successCallback = () => null,
 }: FormProps<T>) => {
+  const { addToast } = useToastContext();
   return (
     <Formik
       initialValues={initialValues}
@@ -29,8 +38,16 @@ const Form = <T extends FormikValues>({
         onSubmit(values)
           .then(() => {
             actions.resetForm();
+            addToast({ title: successMessage, type: "success" });
+            successCallback();
           })
-          .catch()
+          .catch((err: TRPCError) => {
+            addToast({
+              title: errorMessage,
+              message: err.message,
+              type: "error",
+            });
+          })
       }
     >
       {({ isSubmitting, handleSubmit, setSubmitting }) => (
@@ -48,7 +65,7 @@ const Form = <T extends FormikValues>({
               type="primary"
               className="w-full"
             >
-              {submitButtonContent}
+              {isSubmitting ? <Spinner size="md" /> : submitButtonContent}
             </Button>
           </div>
         </form>

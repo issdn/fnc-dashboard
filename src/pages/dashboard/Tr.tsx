@@ -1,32 +1,41 @@
 import { FC, HTMLAttributes, ReactNode, useState } from "react";
 import type { Category } from "@prisma/client";
 
-type EditableTrProps = {
+type TrProps = {
   category: Omit<Category, "id">;
   className?: string;
   index: number;
   children: ReactNode | ReactNode[];
+  selected?: boolean;
 } & HTMLAttributes<HTMLDivElement>;
 
 export const useSelectTr = <T,>() => {
   const [selectedTr, setSelectedTr] = useState<T | null>(null);
-  const selectTr = (item: T) => {
+  const selectTr = (item: T | null) => {
     setSelectedTr(item);
   };
   return { selectedTr, selectTr };
 };
 
-const EditableTr: FC<EditableTrProps> = ({
+const Tr: FC<TrProps> = ({
   category,
   children,
   className = "",
   onClick,
+  selected = false,
 }) => {
   return (
     <>
       <tr
         onClick={onClick}
-        className={`${className} "
+        className={`
+              ${className}
+              ${
+                selected
+                  ? "bg-slate-700 disabled:bg-slate-300 [&>button]:bg-slate-700"
+                  : "disabled:bg-neutral-300 [&:nth-child(2n)>button]:bg-neutral-800 [&:nth-child(2n)]:bg-neutral-800 "
+              }
+              cursor-pointer 
               last:rounded-br-xl 
               [&>td:first-child]:px-1
               [&>td:first-child]:sm:px-2
@@ -46,4 +55,4 @@ const EditableTr: FC<EditableTrProps> = ({
   );
 };
 
-export default EditableTr;
+export default Tr;
