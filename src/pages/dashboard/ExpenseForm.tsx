@@ -3,7 +3,7 @@ import { z } from "zod";
 import Input from "~/pages/StandardComponents/Input";
 import Form from "./Form";
 import type { FormProps } from "./Form";
-import type { Category, Expense } from "@prisma/client";
+import type { Expense } from "@prisma/client";
 import { useCalendar } from "../StandardComponents/Datepicker/hooks";
 import Datepicker from "../StandardComponents/Datepicker/Datepicker";
 
@@ -12,7 +12,7 @@ type ExpenseDTO = Omit<Expense, "id">;
 type ExpenseFormProps<T extends ExpenseDTO> = Omit<
   FormProps<T>,
   "children" | "validationSchema"
-> & { calendar: ReturnType<typeof useCalendar>; selectedTr: Category | null };
+> & { calendar: ReturnType<typeof useCalendar>; selectedTr: Expense | null };
 
 export const validationSchema = z.object({
   name: z.string().optional(),

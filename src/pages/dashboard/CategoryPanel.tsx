@@ -1,38 +1,39 @@
-import { useEffect, useState } from "react";
-import type { Dispatch, FC, SetStateAction } from "react";
-import Tr, { useSelectTr } from "./Tr";
 import type { TRPCError } from "@trpc/server/dist/error/TRPCError";
-import { useToastContext } from "../StandardComponents/Toast/toastContext";
-import type { Category, Expense } from "@prisma/client";
-import { api } from "~/utils/api";
-import ExpenseForm from "./ExpenseForm";
 import Icon from "../StandardComponents/Icon";
-import FilteredTable from "./FilteredTable";
-import { useCalendar } from "../StandardComponents/Datepicker/hooks";
-import EditButton from "./EditButton";
 import CategoryForm from "./CategoryForm";
+import { api } from "~/utils/api";
+import { useToastContext } from "../StandardComponents/Toast/toastContext";
+import FilteredTable from "./FilteredTable";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import Tr, { useSelectTr } from "./Tr";
 import DeleteButton from "./DeleteButton";
+import type { Expense } from "@prisma/client";
 import Spinner from "../StandardComponents/Spinner";
+import EditButton from "./EditButton";
+import ExpenseForm from "./ExpenseForm";
+import { useCalendar } from "../StandardComponents/Datepicker/hooks";
+import dayjs from "dayjs";
 
-const ExpensePanel: FC = () => {
+const CategoryPanel = () => {
   const { addToast } = useToastContext();
   const calendar = useCalendar({});
-  const [tableData, setTableData] = useState<Category[]>([]);
-  const { selectedTr, selectTr } = useSelectTr<Category>();
+
+  const [tableData, setTableData] = useState<Expense[]>([]);
+  const { selectedTr, selectTr } = useSelectTr<Expense>();
 
   const ctx = api.useContext();
-  const result = api.category.getAll.useQuery();
+  const result = api.expense.getAll.useQuery();
 
-  const { mutateAsync: deleteCategory } = api.category.delete.useMutation({
-    onSuccess: async () => await ctx.category.invalidate(),
+  const { mutateAsync: deleteExpense } = api.expense.delete.useMutation({
+    onSuccess: async () => await ctx.expense.invalidate(),
   });
-  const { mutateAsync: editCategory } = api.category.edit.useMutation({
-    onSuccess: async () => await ctx.category.invalidate(),
+  const { mutateAsync: editExpense } = api.expense.edit.useMutation({
+    onSuccess: async () => await ctx.expense.invalidate(),
   });
 
-  const { mutateAsync: addExpense } = api.expense.add.useMutation({
+  const { mutateAsync: addCategory } = api.category.add.useMutation({
     onSuccess: async () => {
-      await ctx.expense.invalidate();
+      await ctx.category.invalidate();
     },
   });
 
@@ -50,6 +51,7 @@ const ExpensePanel: FC = () => {
       </div>
     );
   }
+  1;
 
   if (result.isLoading) {
     return (
@@ -61,36 +63,23 @@ const ExpensePanel: FC = () => {
 
   return (
     <>
-      <fieldset className="w-full rounded-2xl border-2 border-neutral-900 p-4 md:p-6 xl:h-full ">
-        <legend className="mx-2 px-2 text-xl">New Expense</legend>
-        <ExpenseForm
-          selectedTr={selectedTr as Expense | null}
-          submitButtonContent={<Icon icon="add" className="text-3xl" />}
-          calendar={calendar}
+      <fieldset className="h-full w-full flex-1 rounded-2xl border-2 border-neutral-900 p-4 md:p-6">
+        <legend className="mx-2 px-2 text-xl">New Category</legend>
+        <CategoryForm
           onSubmit={(values) =>
-            selectedTr
-              ? addExpense({
-                  ...values,
-                  category_name: selectedTr?.name,
-                }).catch((err: TRPCError) => {
-                  addToast({
-                    title: err.message,
-                    type: "error",
-                  });
+            addCategory(values)
+              .then(() =>
+                addToast({
+                  title: "Category added successfully",
+                  type: "success",
                 })
-              : new Promise(() =>
-                  addToast({
-                    title: "You have to select a category first.",
-                    type: "error",
-                  })
-                )
+              )
+              .catch((reason: TRPCError) => {
+                addToast({ title: reason.message, type: "error" });
+              })
           }
-          initialValues={{
-            date: calendar.date.toDate(),
-            amount: 0,
-            category_name: "",
-            name: "",
-          }}
+          initialValues={{ name: "", monthly_treshold: 0 }}
+          submitButtonContent={<Icon icon="add" className="text-3xl" />}
         />
       </fieldset>
       <div className="relative h-full w-full overflow-hidden">
@@ -100,52 +89,61 @@ const ExpensePanel: FC = () => {
             data={result.data}
             setData={
               setTableData as Dispatch<
-                SetStateAction<Record<string, string | number>[]>
+                SetStateAction<Record<string, string | number | Date>[]>
               >
             }
           >
             <thead className="text-center">
               <tr>
+                <th className="px-2 py-4">Date</th>
+                <th className="px-2 py-4">Name</th>
+                <th className="px-2 py-4">Amount</th>
                 <th className="px-2 py-4">Category</th>
-                <th className="px-2 py-4">Monthly Treshold</th>
-                <th className="px-2 py-4">Actions</th>
               </tr>
             </thead>
             <tbody className="font-bolder w-full">
-              {tableData.map((category, index) => (
+              {tableData.map((expense, index) => (
                 <Tr
                   row={{
-                    name: category.name,
-                    monthly_treshold: category.monthly_treshold,
+                    date: dayjs(expense.date).format(calendar.format),
+                    name: expense.name,
+                    amount: expense.amount,
+                    category_name: expense.category_name,
                   }}
                   index={index}
-                  key={category.id}
+                  key={expense.id}
                   onClick={() => {
-                    selectTr(category);
+                    selectTr(expense);
                   }}
-                  selected={selectedTr?.id === category.id}
+                  selected={selectedTr?.id === expense.id}
                 >
                   <EditButton
                     className="rounded-xl text-base text-neutral-100 outline-neutral-100 hover:bg-white/10"
                     editForm={
-                      <CategoryForm
+                      <ExpenseForm
+                        selectedTr={selectedTr}
+                        calendar={calendar}
                         successMessage="Category updated successfully."
                         errorMessage="Couldn't update category."
                         submitButtonContent={
                           <Icon icon="edit" className="text-3xl" />
                         }
                         onSubmit={(newValues) =>
-                          editCategory({
-                            id: category.id,
+                          editExpense({
+                            id: expense.id,
                             ...(newValues as {
+                              date: Date;
                               name: string;
-                              monthly_treshold: number;
+                              amount: number;
+                              category_name: string;
                             }),
                           })
                         }
                         initialValues={{
-                          name: category.name,
-                          monthly_treshold: category.monthly_treshold,
+                          date: expense.date,
+                          name: expense.name,
+                          amount: expense.amount,
+                          category_name: expense.category_name,
                         }}
                       />
                     }
@@ -155,12 +153,12 @@ const ExpensePanel: FC = () => {
                     successMessage="Category deleted successfully."
                     errorMessage="Couldn't delete category."
                     onDelete={async () => {
-                      await deleteCategory({ id: category.id });
+                      await deleteExpense({ id: expense.id });
                     }}
                     deleteModalContent={
                       <h1 className="text-center">
                         Are you sure you want to delete <br />
-                        <strong>{category.name}</strong> category?
+                        <strong>{expense.name}</strong> category?
                       </h1>
                     }
                   />
@@ -174,4 +172,4 @@ const ExpensePanel: FC = () => {
   );
 };
 
-export default ExpensePanel;
+export default CategoryPanel;

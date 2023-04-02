@@ -1,8 +1,7 @@
 import { FC, HTMLAttributes, ReactNode, useState } from "react";
-import type { Category } from "@prisma/client";
 
 type TrProps = {
-  category: Omit<Category, "id">;
+  row: Record<string, string | number>;
   className?: string;
   index: number;
   children: ReactNode | ReactNode[];
@@ -18,7 +17,7 @@ export const useSelectTr = <T,>() => {
 };
 
 const Tr: FC<TrProps> = ({
-  category,
+  row,
   children,
   className = "",
   onClick,
@@ -44,7 +43,7 @@ const Tr: FC<TrProps> = ({
               [&>td:last-child]:sm:px-2
               [&>td:last-child]:xl:px-16`}
       >
-        {Object.values(category).map((cell, i) => (
+        {Object.values(row).map((cell, i) => (
           <td key={i}>{cell}</td>
         ))}
         <td className="flex flex-row justify-center py-1">
