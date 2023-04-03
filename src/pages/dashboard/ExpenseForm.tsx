@@ -11,8 +11,8 @@ type ExpenseDTO = Omit<Expense, "id">;
 
 type ExpenseFormProps<T extends ExpenseDTO> = Omit<
   FormProps<T>,
-  "children" | "validationSchema"
-> & { calendar: ReturnType<typeof useCalendar>; selectedTr: Expense | null };
+  "validationSchema"
+> & { calendar: ReturnType<typeof useCalendar> };
 
 export const validationSchema = z.object({
   name: z.string().optional(),
@@ -29,7 +29,8 @@ const CategoryForm = <T extends ExpenseDTO>({
   initialValues,
   onSubmit,
   submitButtonContent,
-  selectedTr,
+
+  children,
 }: ExpenseFormProps<T>) => {
   const calendar = useCalendar({});
 
@@ -47,9 +48,7 @@ const CategoryForm = <T extends ExpenseDTO>({
         placeholder="Expense name"
       />
       <Input label="Amount:" type="text" name="amount" placeholder="Amount" />
-      <p className="text-2">
-        Category: <b className="break-all">{selectedTr?.name || "---"}</b>
-      </p>
+      {children}
       <Datepicker name="date" calendar={calendar} />
     </Form>
   );

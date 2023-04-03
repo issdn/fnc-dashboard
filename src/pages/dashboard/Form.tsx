@@ -12,7 +12,7 @@ export type FormProps<T extends FormikValues> = {
   initialValues: T;
   onSubmit: UseMutateAsyncFunction<T | void, unknown, T, unknown>;
   validationSchema: z.ZodSchema;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   submitButtonContent: React.ReactNode | string;
   errorMessage?: string;
   successMessage?: string;
@@ -61,7 +61,7 @@ const Form = <T extends FormikValues>({
           <div className="flex h-full w-full flex-col gap-y-4">
             {children}
             <Button
-              attributes={{ disabled: isSubmitting }}
+              attributes={{ disabled: isSubmitting, type: "submit" }}
               type="primary"
               className="w-full"
             >

@@ -1,23 +1,16 @@
-import type { FC, ReactNode } from "react";
-import Modal, { useModal } from "../StandardComponents/Modal/Modal";
+import type { FC } from "react";
 import Button from "../StandardComponents/Button";
 import Icon from "../StandardComponents/Icon";
 type EditButtonProps = {
   className?: string;
-  editForm: ReactNode;
+  onClick: () => void;
 };
 
-const EditButton: FC<EditButtonProps> = ({ editForm, className = "" }) => {
-  const { isOpen, openModal, closeModal } = useModal();
+const EditButton: FC<EditButtonProps> = ({ onClick, className = "" }) => {
   return (
-    <>
-      <Button onClick={openModal} type="clear" className={className}>
-        <Icon icon="edit" className="text-2xl xl:text-3xl" />
-      </Button>
-      <Modal isOpen={isOpen} closeModal={closeModal}>
-        {editForm}
-      </Modal>
-    </>
+    <Button onClick={onClick} type="clear" className={className}>
+      <Icon icon="edit" className="text-2xl xl:text-3xl" />
+    </Button>
   );
 };
 

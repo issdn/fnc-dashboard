@@ -1,4 +1,4 @@
-import { FC } from "react";
+import type { FC } from "react";
 import { filterObjectsArray } from "./table_functions";
 
 type FilteredTableProps = {
@@ -6,6 +6,24 @@ type FilteredTableProps = {
   setData: React.Dispatch<React.SetStateAction<Record<string, any>[]>>;
   children: React.ReactNode | React.ReactNode[];
   filterKey: string;
+};
+
+const handleTableKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  if ((e.target as HTMLDivElement).nodeName !== "DIV") return;
+  const tableBody = e.currentTarget.getElementsByTagName("tbody")[0];
+  if (!tableBody) return;
+  if (e.key === "ArrowDown") {
+    const trs = tableBody.getElementsByTagName("tr");
+    if (trs.length > 0) {
+      console.log(trs[0]);
+      (trs[0] as HTMLTableRowElement).focus();
+    }
+  } else if (e.key === "ArrowUp") {
+    const trs = tableBody.getElementsByTagName("tr");
+    if (trs.length > 0) {
+      (trs[trs.length - 1] as HTMLTableRowElement).focus();
+    }
+  }
 };
 
 const FilteredTable: FC<FilteredTableProps> = ({
@@ -27,7 +45,10 @@ const FilteredTable: FC<FilteredTableProps> = ({
           placeholder="Search..."
         />
       </div>
-      <div className="h-full w-full overflow-auto rounded-br-2xl rounded-bl-2xl bg-neutral-900 pb-4 text-xs text-neutral-100 sm:text-sm md:pb-8 md:text-xl">
+      <div
+        onKeyDown={handleTableKeyDown}
+        className="h-full w-full overflow-auto rounded-br-2xl rounded-bl-2xl bg-neutral-900 pb-4 text-xs text-neutral-100 sm:text-sm md:pb-8 md:text-xl"
+      >
         <table
           summary="Categories table with monthly tresholds."
           className="w-full text-center"

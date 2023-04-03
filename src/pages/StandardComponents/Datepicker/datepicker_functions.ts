@@ -197,6 +197,8 @@ const handleDateInputTab = (
         dayStartSelectionPosition,
         dayEndSelectionPosition
       );
+    } else if (isDaySelected) {
+      (target.nextSibling as HTMLButtonElement).focus();
     }
   }
 };

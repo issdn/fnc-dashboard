@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, MouseEvent, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Button from "../Button";
 import Icon from "../Icon";
@@ -25,19 +25,43 @@ export const useModal = () => {
 
 const Modal: FC<ModalProps> = ({ children, closeModal, isOpen }) => {
   const ModalPortal = () => {
+    const [isMouseDown, setIsMouseDown] = useState(false);
+    const modalRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+      const target = modalRef.current;
+      target?.focus();
+    }, []);
+
+    const handleMouseUp = (e: MouseEvent<HTMLDivElement>) => {
+      if (isMouseDown) {
+        setIsMouseDown(false);
+      } else {
+        closeModal();
+      }
+    };
+
     return (
-      <div className="absolute top-0 left-0 z-[9999] flex h-screen w-screen flex-col items-center justify-center bg-black/70 px-8">
-        <div className="flex w-full animate-scaleY flex-col items-center justify-start gap-y-2 rounded-2xl bg-white p-4 md:w-fit md:max-w-[500px]">
-          <div className="flex h-fit w-full flex-row justify-end">
-            <Button onClick={closeModal} className="rounded-xl">
-              <Icon
-                className="text-neutral-400 hover:text-neutral-500"
-                icon="close"
-              />
-            </Button>
+      <div
+        onClick={handleMouseUp}
+        className="absolute top-0 left-0 z-[9999] flex h-screen w-screen flex-col items-center justify-center bg-black/70 px-8"
+      >
+        {isOpen && (
+          <div
+            tabIndex={0}
+            className="flex w-full animate-scaleY flex-col items-center justify-start gap-y-2 rounded-2xl bg-white p-4 md:w-fit md:max-w-[500px]"
+          >
+            <div className="flex h-fit w-full flex-row justify-end">
+              <Button onClick={closeModal} className="rounded-xl">
+                <Icon
+                  className="text-neutral-400 hover:text-neutral-500"
+                  icon="close"
+                />
+              </Button>
+            </div>
+            {children}
           </div>
-          {children}
-        </div>
+        )}
       </div>
     );
   };

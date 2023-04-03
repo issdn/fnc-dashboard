@@ -45,6 +45,7 @@ const Datepicker: FC<DatepickerProps> = ({ calendar, ...props }) => {
 
     return (
       <button
+        type="button"
         onClick={() => calendar.setDay(day)}
         key={day}
         className="flex h-11 w-11 flex-row items-center justify-center rounded-xl text-xl enabled:hover:bg-neutral-700 disabled:text-neutral-500"
@@ -84,8 +85,9 @@ const Datepicker: FC<DatepickerProps> = ({ calendar, ...props }) => {
           className="h-full w-full whitespace-nowrap break-keep rounded-xl border-2 border-neutral-900 bg-neutral-100 py-3 text-center font-bold text-neutral-900 outline-none transition-colors duration-300 hover:border-neutral-500 focus:border-blue-600"
         ></input>
         <Button
+          attributes={{ type: "button" }}
           onClick={toggleVisibility}
-          className="absolute right-2 flex flex-row items-center gap-x-2 rounded-xl px-4 enabled:hover:bg-neutral-900/10 disabled:cursor-default disabled:text-neutral-700"
+          className="absolute right-2 flex flex-row items-center gap-x-2 rounded-xl px-4 focus:bg-neutral-900/10 enabled:hover:bg-neutral-900/10 disabled:cursor-default disabled:text-neutral-700"
         >
           <Icon className="my-0.5 text-neutral-900" icon="calendar_month" />
         </Button>
@@ -102,9 +104,10 @@ const Datepicker: FC<DatepickerProps> = ({ calendar, ...props }) => {
                     disabled: calendar.reachedMinMonth(
                       calendar.date.month() - 2
                     ),
+                    type: "button",
                   }}
                 >
-                  <Icon className="mx-1 text-2xl md:mx-0" icon="chevron_left" />{" "}
+                  <Icon className="mx-1 text-2xl md:mx-0" icon="chevron_left" />
                 </Button>
                 <div className="flex flex-col items-center">
                   <p className=" text-xl font-bold">
@@ -119,12 +122,13 @@ const Datepicker: FC<DatepickerProps> = ({ calendar, ...props }) => {
                     disabled: calendar.reachedMaxMonth(
                       calendar.date.month() + 2
                     ),
+                    type: "button",
                   }}
                 >
                   <Icon
                     className="mx-1 text-2xl md:mx-0"
                     icon="chevron_right"
-                  />{" "}
+                  />
                 </Button>
               </div>
               <div className="w-full px-2">

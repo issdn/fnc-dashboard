@@ -5,7 +5,7 @@ import { api } from "~/utils/api";
 import { useToastContext } from "../StandardComponents/Toast/toastContext";
 import FilteredTable from "./FilteredTable";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import Tr, { useSelectTr } from "./Tr";
+import Tr from "./Tr";
 import DeleteButton from "./DeleteButton";
 import type { Expense } from "@prisma/client";
 import Spinner from "../StandardComponents/Spinner";
@@ -13,13 +13,26 @@ import EditButton from "./EditButton";
 import ExpenseForm from "./ExpenseForm";
 import { useCalendar } from "../StandardComponents/Datepicker/hooks";
 import dayjs from "dayjs";
+import Modal, { useModal } from "../StandardComponents/Modal/Modal";
+import DeleteModal from "./DeleteModal";
 
 const CategoryPanel = () => {
+  const {
+    isOpen: isEditOpenModal,
+    openModal: openEditModal,
+    closeModal: closeEditModal,
+  } = useModal();
+
+  const {
+    isOpen: isDeleteOpenModal,
+    openModal: openDeleteModal,
+    closeModal: closeDeleteModal,
+  } = useModal();
+
   const { addToast } = useToastContext();
   const calendar = useCalendar({});
-
   const [tableData, setTableData] = useState<Expense[]>([]);
-  const { selectedTr, selectTr } = useSelectTr<Expense>();
+  const [expenseToMutate, setExpenseToMutate] = useState<Expense | null>(null);
 
   const ctx = api.useContext();
   const result = api.expense.getAll.useQuery();
@@ -40,7 +53,6 @@ const CategoryPanel = () => {
   useEffect(() => {
     if (result.data) {
       setTableData(result.data);
-      selectTr(result.data[0] || null);
     }
   }, [result.data]);
 
@@ -112,55 +124,21 @@ const CategoryPanel = () => {
                   }}
                   index={index}
                   key={expense.id}
-                  onClick={() => {
-                    selectTr(expense);
-                  }}
-                  selected={selectedTr?.id === expense.id}
                 >
                   <EditButton
+                    onClick={() => {
+                      setExpenseToMutate(expense);
+                      openEditModal();
+                    }}
                     className="rounded-xl text-base text-neutral-100 outline-neutral-100 hover:bg-white/10"
-                    editForm={
-                      <ExpenseForm
-                        selectedTr={selectedTr}
-                        calendar={calendar}
-                        successMessage="Category updated successfully."
-                        errorMessage="Couldn't update category."
-                        submitButtonContent={
-                          <Icon icon="edit" className="text-3xl" />
-                        }
-                        onSubmit={(newValues) =>
-                          editExpense({
-                            id: expense.id,
-                            ...(newValues as {
-                              date: Date;
-                              name: string;
-                              amount: number;
-                              category_name: string;
-                            }),
-                          })
-                        }
-                        initialValues={{
-                          date: expense.date,
-                          name: expense.name,
-                          amount: expense.amount,
-                          category_name: expense.category_name,
-                        }}
-                      />
-                    }
                   />
+
                   <DeleteButton
                     className="rounded-xl text-base text-neutral-100 outline-neutral-100 hover:bg-white/10"
-                    successMessage="Category deleted successfully."
-                    errorMessage="Couldn't delete category."
-                    onDelete={async () => {
-                      await deleteExpense({ id: expense.id });
+                    onClick={() => {
+                      setExpenseToMutate(expense);
+                      openDeleteModal();
                     }}
-                    deleteModalContent={
-                      <h1 className="text-center">
-                        Are you sure you want to delete <br />
-                        <strong>{expense.name}</strong> category?
-                      </h1>
-                    }
                   />
                 </Tr>
               ))}
@@ -168,6 +146,45 @@ const CategoryPanel = () => {
           </FilteredTable>
         </div>
       </div>
+      <Modal isOpen={isEditOpenModal} closeModal={closeEditModal}>
+        <ExpenseForm
+          calendar={calendar}
+          successMessage="Category updated successfully."
+          errorMessage="Couldn't update category."
+          submitButtonContent={<Icon icon="edit" className="text-3xl" />}
+          onSubmit={(newValues) =>
+            editExpense({
+              id: expenseToMutate?.id || "0",
+              ...(newValues as {
+                date: Date;
+                name: string;
+                amount: number;
+                category_name: string;
+              }),
+            })
+          }
+          initialValues={{
+            date: expenseToMutate?.date || new Date(),
+            name: expenseToMutate?.name || "",
+            amount: expenseToMutate?.amount || 0,
+            category_name: expenseToMutate?.category_name || "",
+          }}
+        />
+      </Modal>
+      <DeleteModal
+        isDeleteOpenModal={isDeleteOpenModal}
+        closeDeleteModal={closeDeleteModal}
+        onSuccessMessage="Category deleted successfully."
+        onErrorMessage="Couldn't delete category."
+        onDelete={async () => {
+          await deleteExpense({ id: expenseToMutate?.id || "0" });
+        }}
+      >
+        <h1 className="text-center">
+          Are you sure you want to delete <br />
+          <strong>{expenseToMutate?.name || ""}</strong> category?
+        </h1>
+      </DeleteModal>
     </>
   );
 };
