@@ -2,11 +2,11 @@ import type { z } from "zod";
 import { Formik } from "formik";
 import type { FormikValues } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import Button from "../StandardComponents/Button";
+import Button from "./Button";
 import type { UseMutateAsyncFunction } from "@tanstack/react-query";
-import { useToastContext } from "../StandardComponents/Toast/toastContext";
+import { useToastContext } from "./Toast/toastContext";
 import { TRPCError } from "@trpc/server";
-import Spinner from "../StandardComponents/Spinner";
+import Spinner from "./Spinner";
 
 export type FormProps<T extends FormikValues> = {
   initialValues: T;
@@ -34,8 +34,9 @@ const Form = <T extends FormikValues>({
     <Formik
       initialValues={initialValues}
       validationSchema={toFormikValidationSchema(validationSchema)}
-      onSubmit={(values, actions) =>
-        onSubmit(values)
+      onSubmit={async (values, actions) => {
+        actions.setSubmitting(true);
+        await onSubmit(values)
           .then(() => {
             actions.resetForm();
             addToast({ title: successMessage, type: "success" });
@@ -47,8 +48,8 @@ const Form = <T extends FormikValues>({
               message: err.message,
               type: "error",
             });
-          })
-      }
+          });
+      }}
     >
       {({ isSubmitting, handleSubmit, setSubmitting }) => (
         <form

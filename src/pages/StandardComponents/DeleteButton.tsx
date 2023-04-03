@@ -1,6 +1,6 @@
 import type { FC } from "react";
-import Icon from "../StandardComponents/Icon";
-import Button from "../StandardComponents/Button";
+import Icon from "./Icon";
+import Button from "./Button";
 
 type DeleteButtonProps = {
   className?: string;

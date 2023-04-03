@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import Input from "~/pages/StandardComponents/Input";
 import type { CategoryDTO } from "./types";
-import Form, { FormProps } from "./Form";
+import Form, { FormProps } from "../StandardComponents/Form";
 
 type CategoryFormProps<T extends CategoryDTO> = Omit<
   FormProps<T>,

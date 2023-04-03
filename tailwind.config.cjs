@@ -32,11 +32,22 @@ const config = {
             transform: "scaleY(1)",
           },
         },
+        slideIn: {
+          from: {
+            opacity: "0",
+            transform: "translateY(-100%)",
+          },
+          to: {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
       },
       animation: {
         "pulse-800": "pulse-800 2s ease-in-out infinite alternate",
         "pulse-700": "pulse-700 2s ease-in-out infinite alternate",
         scaleY: "scaleY 100ms ease-out",
+        slideIn: "slideIn 100ms ease-in-out",
       },
     },
     fontFamily: {

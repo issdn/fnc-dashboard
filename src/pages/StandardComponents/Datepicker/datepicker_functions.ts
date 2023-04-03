@@ -157,52 +157,6 @@ const handleDateInputArrowLeft = (
   }
 };
 
-const handleDateInputTab = (
-  target: HTMLInputElement,
-  selectionStart: number,
-  shift: boolean
-) => {
-  const {
-    monthStartSelectionPosition,
-    yearStartSelectionPosition,
-    monthEndSelectionPosition,
-    yearEndSelectionPosition,
-    isDaySelected,
-    isMonthSelected,
-    dayStartSelectionPosition,
-    dayEndSelectionPosition,
-    isYearSelected,
-  } = getSelectionInfo(target, selectionStart);
-
-  if (shift) {
-    if (isMonthSelected) {
-      target.setSelectionRange(
-        yearStartSelectionPosition,
-        yearEndSelectionPosition
-      );
-    } else if (isDaySelected) {
-      target.setSelectionRange(
-        monthStartSelectionPosition,
-        monthEndSelectionPosition
-      );
-    }
-  } else {
-    if (isYearSelected) {
-      target.setSelectionRange(
-        monthStartSelectionPosition,
-        monthEndSelectionPosition
-      );
-    } else if (isMonthSelected) {
-      target.setSelectionRange(
-        dayStartSelectionPosition,
-        dayEndSelectionPosition
-      );
-    } else if (isDaySelected) {
-      (target.nextSibling as HTMLButtonElement).focus();
-    }
-  }
-};
-
 const handleDateInputArrowUp = (
   target: HTMLInputElement,
   selectionStart: number,
@@ -295,7 +249,6 @@ export const handleKeyDownSelection = (
   e: KeyboardEvent<HTMLInputElement>,
   calendar: ReturnType<typeof useCalendar>
 ) => {
-  e.preventDefault();
   const target = e.target as HTMLInputElement;
   target.focus();
   const selectionStart = target.selectionStart || 0;
@@ -307,26 +260,25 @@ export const handleKeyDownSelection = (
   }
 
   if (key === "ArrowRight") {
+    e.preventDefault();
     handleDateInputArrowRight(target, selectionStart);
     return;
   }
 
   if (key === "ArrowLeft") {
+    e.preventDefault();
     handleDateInputArrowLeft(target, selectionStart);
     return;
   }
 
-  if (key === "Tab") {
-    handleDateInputTab(target, selectionStart, e.shiftKey);
-    return;
-  }
-
   if (key === "ArrowDown") {
+    e.preventDefault();
     handleDateInputArrowDown(target, selectionStart, calendar);
     return;
   }
 
   if (key === "ArrowUp") {
+    e.preventDefault();
     return handleDateInputArrowUp(target, selectionStart, calendar);
   }
 };

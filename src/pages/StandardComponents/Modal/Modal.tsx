@@ -1,4 +1,5 @@
-import { FC, MouseEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { FC } from "react";
 import { createPortal } from "react-dom";
 import Button from "../Button";
 import Icon from "../Icon";
@@ -33,7 +34,7 @@ const Modal: FC<ModalProps> = ({ children, closeModal, isOpen }) => {
       target?.focus();
     }, []);
 
-    const handleMouseUp = (e: MouseEvent<HTMLDivElement>) => {
+    const handleMouseUp = () => {
       if (isMouseDown) {
         setIsMouseDown(false);
       } else {
@@ -48,6 +49,7 @@ const Modal: FC<ModalProps> = ({ children, closeModal, isOpen }) => {
       >
         {isOpen && (
           <div
+            ref={modalRef}
             tabIndex={0}
             className="flex w-full animate-scaleY flex-col items-center justify-start gap-y-2 rounded-2xl bg-white p-4 md:w-fit md:max-w-[500px]"
           >

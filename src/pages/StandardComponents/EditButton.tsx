@@ -1,6 +1,6 @@
 import type { FC } from "react";
-import Button from "../StandardComponents/Button";
-import Icon from "../StandardComponents/Icon";
+import Button from "./Button";
+import Icon from "./Icon";
 type EditButtonProps = {
   className?: string;
   onClick: () => void;

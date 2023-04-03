@@ -1,11 +1,5 @@
-import {
-  FC,
-  HTMLAttributes,
-  ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import type { FC, HTMLAttributes, ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type TrProps = {
   row: Record<string, string | number>;
@@ -110,6 +104,7 @@ const Tr: FC<TrProps> = ({
                   ? "bg-slate-700 disabled:bg-slate-300 [&>button]:bg-slate-700"
                   : "disabled:bg-neutral-300 [&:nth-child(2n)>button]:bg-neutral-800 [&:nth-child(2n)]:bg-neutral-800 "
               } 
+              animate-slideIn
               last:rounded-br-xl 
               [&>td:first-child]:px-1
               [&>td:first-child]:sm:px-2

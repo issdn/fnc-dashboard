@@ -9,12 +9,12 @@ import ExpenseForm from "./ExpenseForm";
 import Icon from "../StandardComponents/Icon";
 import FilteredTable from "./FilteredTable";
 import { useCalendar } from "../StandardComponents/Datepicker/hooks";
-import EditButton from "./EditButton";
+import EditButton from "../StandardComponents/EditButton";
 import CategoryForm from "./CategoryForm";
-import DeleteButton from "./DeleteButton";
+import DeleteButton from "../StandardComponents/DeleteButton";
 import Spinner from "../StandardComponents/Spinner";
 import Modal, { useModal } from "../StandardComponents/Modal/Modal";
-import DeleteModal from "./DeleteModal";
+import DeleteModal from "../StandardComponents/DeleteModal";
 
 const ExpensePanel: FC = () => {
   const {
@@ -43,6 +43,7 @@ const ExpensePanel: FC = () => {
   const { mutateAsync: deleteCategory } = api.category.delete.useMutation({
     onSuccess: async () => {
       await ctx.category.invalidate();
+      await ctx.expense.invalidate();
     },
   });
 

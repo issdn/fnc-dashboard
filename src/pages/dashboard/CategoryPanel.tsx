@@ -4,17 +4,18 @@ import CategoryForm from "./CategoryForm";
 import { api } from "~/utils/api";
 import { useToastContext } from "../StandardComponents/Toast/toastContext";
 import FilteredTable from "./FilteredTable";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import Tr from "./Tr";
-import DeleteButton from "./DeleteButton";
+import DeleteButton from "../StandardComponents/DeleteButton";
 import type { Expense } from "@prisma/client";
 import Spinner from "../StandardComponents/Spinner";
-import EditButton from "./EditButton";
+import EditButton from "../StandardComponents/EditButton";
 import ExpenseForm from "./ExpenseForm";
 import { useCalendar } from "../StandardComponents/Datepicker/hooks";
 import dayjs from "dayjs";
 import Modal, { useModal } from "../StandardComponents/Modal/Modal";
-import DeleteModal from "./DeleteModal";
+import DeleteModal from "../StandardComponents/DeleteModal";
 
 const CategoryPanel = () => {
   const {

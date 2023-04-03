@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 import Input from "~/pages/StandardComponents/Input";
-import Form from "./Form";
-import type { FormProps } from "./Form";
+import Form from "../StandardComponents/Form";
+import type { FormProps } from "../StandardComponents/Form";
 import type { Expense } from "@prisma/client";
 import { useCalendar } from "../StandardComponents/Datepicker/hooks";
 import Datepicker from "../StandardComponents/Datepicker/Datepicker";
