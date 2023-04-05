@@ -21,6 +21,7 @@ model Expense {
 
 model Income {
     id       String    @id @default(auto()) @map ("_id") @db.ObjectId
+    name     String    @default("")
     date     DateTime  @default(now())
     amount   Float
 }

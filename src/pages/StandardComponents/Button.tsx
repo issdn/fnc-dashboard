@@ -16,8 +16,8 @@ export const types = {
 
 export type ButtonStyles = keyof typeof types;
 
-type ButtonProps = {
-  onClick?: () => unknown;
+export type ButtonProps = {
+  onClick?: () => unknown | (() => Promise<unknown>);
   children?: ReactNode;
   className?: string;
   type?: ButtonStyles;

@@ -9,12 +9,9 @@ type TrProps = {
   selected?: boolean;
 } & HTMLAttributes<HTMLDivElement>;
 
-export const useSelectTr = <T,>() => {
-  const [selectedTr, setSelectedTr] = useState<T | null>(null);
-  const selectTr = (item: T | null) => {
-    setSelectedTr(item);
-  };
-  return { selectedTr, selectTr };
+export const useSelectTr = <T,>(row: T | null) => {
+  const [selectedTr, setSelectedTr] = useState<T | null>(row);
+  return { selectedTr, setSelectedTr };
 };
 
 const handleMoveToTheNextPreviousTR = (

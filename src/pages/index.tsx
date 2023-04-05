@@ -1,8 +1,13 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import MainLayout from "./MainLayout";
-import ExpensePanel from "./dashboard/ExpensePanel";
-import CategoryPanel from "./dashboard/CategoryPanel";
+import type { GetStaticProps } from "next/types";
+import ExpenseTable from "./dashboard/ExpenseTable";
+import dynamic from "next/dynamic";
+import { createSSGHelper } from "./utils";
+const ExpenseCharts = dynamic(import("./dashboard/ExpenseCharts"), {
+  ssr: false,
+});
 
 const Home: NextPage = () => {
   return (
@@ -11,17 +16,23 @@ const Home: NextPage = () => {
         <title>Dashboard</title>
       </Head>
       <MainLayout>
-        <div className="flex h-full w-full flex-col gap-y-8 gap-x-8 overflow-y-auto md:p-8">
-          <div className="flex w-full flex-col items-start gap-y-8 gap-x-8 xl:flex-row">
-            <ExpensePanel />
-          </div>
-          <div className="flex h-full w-full flex-col items-start gap-y-8 gap-x-8 xl:flex-row">
-            <CategoryPanel />
-          </div>
-        </div>
+        <ExpenseTable />
+        <ExpenseCharts />
       </MainLayout>
     </>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  const ssg = createSSGHelper();
+
+  await ssg.expense.getAll.prefetch();
+
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+    },
+  };
 };
 
 export default Home;

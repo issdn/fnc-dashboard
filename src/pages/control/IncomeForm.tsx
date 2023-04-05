@@ -1,15 +1,11 @@
+import Form, { type FormProps } from "../StandardComponents/Form";
 import { z } from "zod";
-
-import Input from "~/pages/StandardComponents/Input";
-import Form from "../StandardComponents/Form";
-import type { FormProps } from "../StandardComponents/Form";
-import type { Expense } from "@prisma/client";
-import { useCalendar } from "../StandardComponents/Datepicker/hooks";
+import type { Income } from "@prisma/client";
+import Input from "../StandardComponents/Input";
+import { type useCalendar } from "../StandardComponents/Datepicker/hooks";
 import Datepicker from "../StandardComponents/Datepicker/Datepicker";
 
-type ExpenseDTO = Omit<Expense, "id">;
-
-type ExpenseFormProps<T extends ExpenseDTO> = Omit<
+type IncomeFormProps<T extends Omit<Income, "id">> = Omit<
   FormProps<T>,
   "validationSchema"
 > & { calendar: ReturnType<typeof useCalendar> };
@@ -25,15 +21,12 @@ export const validationSchema = z.object({
   date: z.date(),
 });
 
-const CategoryForm = <T extends ExpenseDTO>({
+const IncomeForm = <T extends Omit<Income, "id">>({
   initialValues,
   onSubmit,
   submitButtonContent,
-
-  children,
-}: ExpenseFormProps<T>) => {
-  const calendar = useCalendar({});
-
+  calendar,
+}: IncomeFormProps<T>) => {
   return (
     <Form
       initialValues={initialValues}
@@ -42,16 +35,15 @@ const CategoryForm = <T extends ExpenseDTO>({
       submitButtonContent={submitButtonContent}
     >
       <Input
-        label="Expense name:"
+        label="Income name:"
         type="text"
         name="name"
-        placeholder="Expense name"
+        placeholder="Income Name"
       />
       <Input label="Amount:" type="text" name="amount" placeholder="Amount" />
-      {children}
       <Datepicker name="date" calendar={calendar} />
     </Form>
   );
 };
 
-export default CategoryForm;
+export default IncomeForm;

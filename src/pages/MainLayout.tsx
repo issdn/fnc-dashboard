@@ -11,7 +11,9 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
         <Navigation route={route} />
       </div>
       <main className="flex h-screen w-full flex-row justify-center overflow-hidden">
-        {children}
+        <div className="flex h-full w-full flex-col gap-y-8 gap-x-8 overflow-y-auto md:p-8">
+          {children}
+        </div>
       </main>
     </div>
   );

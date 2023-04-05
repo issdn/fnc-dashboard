@@ -87,7 +87,7 @@ const Datepicker: FC<DatepickerProps> = ({ calendar, ...props }) => {
         <Button
           attributes={{ type: "button" }}
           onClick={toggleVisibility}
-          className="absolute right-2 flex flex-row items-center gap-x-2 rounded-xl px-4 focus:bg-neutral-900/10 enabled:hover:bg-neutral-900/10 disabled:cursor-default disabled:text-neutral-700"
+          className="absolute right-2 flex flex-row items-center gap-x-2 rounded-full px-4 focus:bg-neutral-900/10 enabled:hover:bg-neutral-900/10 disabled:cursor-default disabled:text-neutral-700"
         >
           <Icon className="my-0.5 text-neutral-900" icon="calendar_month" />
         </Button>

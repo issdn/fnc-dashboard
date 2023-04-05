@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import Input from "~/pages/StandardComponents/Input";
 import type { CategoryDTO } from "./types";
-import Form, { FormProps } from "../StandardComponents/Form";
+import Form, { type FormProps } from "../StandardComponents/Form";
 
 type CategoryFormProps<T extends CategoryDTO> = Omit<
   FormProps<T>,
@@ -26,9 +26,6 @@ const CategoryForm = <T extends CategoryDTO>({
   initialValues,
   onSubmit,
   submitButtonContent,
-  successMessage,
-  errorMessage,
-  successCallback,
 }: CategoryFormProps<T>) => {
   return (
     <Form
@@ -36,9 +33,6 @@ const CategoryForm = <T extends CategoryDTO>({
       onSubmit={onSubmit}
       validationSchema={validationSchema}
       submitButtonContent={submitButtonContent}
-      successMessage={successMessage}
-      errorMessage={errorMessage}
-      successCallback={successCallback}
     >
       <Input
         label="Category Name:"

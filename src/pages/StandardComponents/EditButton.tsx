@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import Button from "./Button";
 import Icon from "./Icon";
+
 type EditButtonProps = {
   className?: string;
   onClick: () => void;
@@ -8,7 +9,11 @@ type EditButtonProps = {
 
 const EditButton: FC<EditButtonProps> = ({ onClick, className = "" }) => {
   return (
-    <Button onClick={onClick} type="clear" className={className}>
+    <Button
+      onClick={onClick}
+      type="clear"
+      className={`rounded-xl text-base text-neutral-100 outline-neutral-100 hover:bg-white/10 ${className}`}
+    >
       <Icon icon="edit" className="text-2xl xl:text-3xl" />
     </Button>
   );

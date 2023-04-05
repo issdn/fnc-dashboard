@@ -2,22 +2,20 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
-export const expenseRouter = createTRPCRouter({
+export const incomeRouter = createTRPCRouter({
   add: publicProcedure
     .input(
       z.object({
+        name: z.string().optional(),
         amount: z.number().nonnegative(),
-        category_name: z.string().min(1).optional(),
-        name: z.string(),
         date: z.date(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.prisma.expense.create({
+      return await ctx.prisma.income.create({
         data: {
-          amount: input.amount,
-          category_name: input.category_name || "",
           name: input.name,
+          amount: input.amount,
           date: input.date,
         },
       });
@@ -26,30 +24,35 @@ export const expenseRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
+        name: z.string().optional(),
         amount: z.number().nonnegative(),
-        category_name: z.string().min(1),
-        name: z.string(),
         date: z.date(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.prisma.expense.update({
+      return await ctx.prisma.income.update({
         where: {
           id: input.id,
         },
         data: {
-          amount: input.amount,
-          category_name: input.category_name,
           name: input.name,
+          amount: input.amount,
           date: input.date,
         },
       });
     }),
-  getAll: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.expense.findMany();
+  getLast: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.income.findFirst({
+      orderBy: { date: "desc" },
+    });
+  }),
+  getHistory: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.income.findMany({
+      orderBy: { date: "desc" },
+    });
   }),
   delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
-    return await ctx.prisma.expense.delete({
+    return await ctx.prisma.income.delete({
       where: {
         id: input,
       },
