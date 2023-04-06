@@ -1,14 +1,7 @@
-import {
-  FC,
-  FocusEvent,
-  KeyboardEvent,
-  MouseEvent,
-  useRef,
-  useState,
-} from "react";
-import { FieldConfig, useField } from "formik";
+import { type FC } from "react";
+import { type FieldConfig, useField } from "formik";
 import { useVisibility } from "../hooks";
-import { useCalendar } from "./hooks";
+import type { useCalendar } from "./hooks";
 import {
   handleKeyDownSelection,
   handleMouseSelection,
@@ -37,8 +30,9 @@ const MONTH_NAMES = [
 ];
 
 const Datepicker: FC<DatepickerProps> = ({ calendar, ...props }) => {
+  calendar.setFormat("YYYY/MM/DD");
   const { isVisible, toggleVisibility } = useVisibility();
-  const [field, meta] = useField(props);
+  const [field] = useField(props);
 
   const renderDayButton = (day: number) => {
     const disabled = calendar.reachedMaxDay(day) || calendar.reachedMinDay(day);
@@ -87,7 +81,8 @@ const Datepicker: FC<DatepickerProps> = ({ calendar, ...props }) => {
         <Button
           attributes={{ type: "button" }}
           onClick={toggleVisibility}
-          className="absolute right-2 flex flex-row items-center gap-x-2 rounded-full px-4 focus:bg-neutral-900/10 enabled:hover:bg-neutral-900/10 disabled:cursor-default disabled:text-neutral-700"
+          className="absolute right-2"
+          type="accent"
         >
           <Icon className="my-0.5 text-neutral-900" icon="calendar_month" />
         </Button>

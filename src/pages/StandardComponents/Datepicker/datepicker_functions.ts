@@ -7,7 +7,7 @@ const select = (target: HTMLInputElement, start: number) => {
 };
 
 const getSelectionInfo = (target: HTMLInputElement, selectionStart: number) => {
-  const [year, month, day] = target.value.split("-");
+  const [year, month, day] = target.value.split("/");
   if (!year || !month || !day) throw new Error("Invalid date format.");
 
   const [dayLength, monthLength, yearLength] = [
@@ -80,26 +80,26 @@ const handleNumericKeyDown = (
 
   if (isYearSelected) {
     if (yearLength === 4) {
-      target.value = [key, month, day].join("-");
+      target.value = [key, month, day].join("/");
       select(target, yearStartSelectionPosition + 1);
     } else {
-      target.value = [year + key, month, day].join("-");
+      target.value = [year + key, month, day].join("/");
       select(target, yearEndSelectionPosition + 1);
     }
   } else if (isMonthSelected) {
     if (monthLength === 2) {
-      target.value = [year, key, day].join("-");
+      target.value = [year, key, day].join("/");
       select(target, monthStartSelectionPosition + 1);
     } else {
-      target.value = [year, month + key, day].join("-");
+      target.value = [year, month + key, day].join("/");
       select(target, monthEndSelectionPosition + 1);
     }
   } else if (isDaySelected) {
     if (dayLength === 2) {
-      target.value = [year, month, key].join("-");
+      target.value = [year, month, key].join("/");
       select(target, dayStartSelectionPosition + 1);
     } else {
-      target.value = [year, month, day + key].join("-");
+      target.value = [year, month, day + key].join("/");
       select(target, dayEndSelectionPosition + 1);
     }
   }

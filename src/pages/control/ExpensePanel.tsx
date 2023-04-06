@@ -6,7 +6,7 @@ import Icon from "../StandardComponents/Icon";
 import { useCalendar } from "../StandardComponents/Datepicker/hooks";
 import Fieldset from "../StandardComponents/Fieldset";
 import type { Category } from "@prisma/client";
-import { useSelectTr } from "./Tr";
+import { useSelectTr } from "../StandardComponents/Tr";
 
 type ExpensePanelProps = {
   selectedCategory: ReturnType<typeof useSelectTr<Category>>["selectedTr"];

@@ -1,16 +1,17 @@
 import dayjs from "dayjs";
 import { useState } from "react";
+import { useSettings } from "~/pages/settingsContext";
 
 export const useCalendar = ({
   from = dayjs("2023-01-01"),
   to = dayjs(),
-  format = "YYYY-MM-DD",
 }: {
   from?: dayjs.Dayjs;
   to?: dayjs.Dayjs;
-  format?: string;
 }) => {
   const [_date, _setDate] = useState(to);
+  const { dateFormat } = useSettings();
+  const [format, setFormat] = useState(dateFormat || "YYYY-MM-DD");
 
   const moveYearRight = () => {
     return _date.add(1, "y");
@@ -71,6 +72,7 @@ export const useCalendar = ({
   return {
     date: _date,
     format,
+    setFormat,
     stringDate,
     moveYearRight,
     moveYearLeft,

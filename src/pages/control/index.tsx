@@ -9,6 +9,7 @@ import { api } from "~/utils/api";
 import IncomeTable from "./IncomeTable";
 import type { Category } from "@prisma/client";
 import { useSelectTr } from "../StandardComponents/Tr";
+import CsvUploadInput from "./CsvUploadInput";
 
 const Control: NextPage = () => {
   const { data } = api.category.getAll.useQuery();
@@ -32,7 +33,7 @@ const Control: NextPage = () => {
         </div>
         <div className="flex h-full w-full flex-col items-start gap-y-8 gap-x-8 xl:flex-row">
           <CategoryIncomePanel />
-          <IncomeTable />
+          <CsvUploadInput />
         </div>
       </MainLayout>
     </>

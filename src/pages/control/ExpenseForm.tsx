@@ -6,7 +6,7 @@ import type { Expense } from "@prisma/client";
 import { useCalendar } from "../StandardComponents/Datepicker/hooks";
 import Datepicker from "../StandardComponents/Datepicker/Datepicker";
 
-type ExpenseDTO = Omit<Expense, "id">;
+type ExpenseDTO = Omit<Expense, "id" | "category_name">;
 
 type ExpenseFormProps<T extends ExpenseDTO> = Omit<
   FormProps<T>,

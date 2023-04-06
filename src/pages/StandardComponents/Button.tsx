@@ -12,6 +12,10 @@ export const types = {
   clear: "",
   secondary:
     "text-neutral-900 rounded-xl hover:text-neutral-600 border-2 border-neutral-900 hover:border-neutral-600 disabled:bg-neutral-600 outline-neutral-900",
+  accent:
+    "flex flex-row items-center gap-x-2 rounded-full px-4 focus:bg-neutral-900/10 enabled:hover:bg-neutral-900/10 disabled:cursor-default disabled:text-neutral-700",
+  "accent-dark":
+    "flex flex-row items-center text-neutral-100 gap-x-2 rounded-full px-4 focus:bg-neutral-200/10 enabled:hover:bg-neutral-200/10 disabled:cursor-default disabled:text-neutral-400",
 } as const;
 
 export type ButtonStyles = keyof typeof types;

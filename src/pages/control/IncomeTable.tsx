@@ -61,22 +61,21 @@ const IncomeTable: FC = () => {
     <>
       <FilteredTable<Income> filterKey="name" data={data} setData={setData}>
         <Thead>
+          <th>Date</th>
           <th>Name</th>
           <th>Amount</th>
-          <th>Date</th>
           <th>Actions</th>
         </Thead>
         <Tbody>
           {data.map((income, index) => (
             <Tr
               row={{
+                date: dayjs(income.date).format(calendar.format),
                 name: income.name,
                 amount: income.amount,
-                date: dayjs(income.date).format(calendar.format),
               }}
               index={index}
               key={income.id}
-              className="cursor-pointer"
             >
               <EditButton
                 onClick={() => {

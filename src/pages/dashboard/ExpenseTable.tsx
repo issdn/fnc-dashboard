@@ -109,6 +109,7 @@ const ExpenseTable: FC = () => {
             onSubmit={async (newValues) =>
               await editExpense({
                 id: expenseToEdit.id,
+                category_name: expenseToEdit.category_name,
                 ...newValues,
               })
             }
