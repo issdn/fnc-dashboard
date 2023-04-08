@@ -24,8 +24,9 @@ export const readCsvFile = <TCsvDataObject extends ZodObject<ZodRawShape>>(
   const fileHeadersNormalized = fileHeaders.map((header) =>
     header.toLowerCase().trim()
   );
-  fileHeadersNormalized.forEach((header, index) => {
-    if (header !== headers[index]) {
+
+  fileHeadersNormalized.forEach((header) => {
+    if (!headers.find((h) => h === header)) {
       throw new CsvError(
         `CSV file headers do not match expected headers. Expected: ${headers.toString()}, got: ${fileHeadersNormalized.toString()}`
       );

@@ -6,11 +6,16 @@ import ExpenseTable from "./dashboard/ExpenseTable";
 import dynamic from "next/dynamic";
 import { createSSGHelper } from "./utils";
 import IncomeTable from "./control/IncomeTable";
-const ExpenseCharts = dynamic(import("./dashboard/ExpenseCharts"), {
+import { api } from "~/utils/api";
+
+const StackedAreaChart = dynamic(import("./dashboard/StackedAreaChart"), {
   ssr: false,
 });
 
 const Home: NextPage = () => {
+  const { data: expenseData } = api.expense.getAll.useQuery();
+  const { data: incomeData } = api.income.getHistory.useQuery();
+
   return (
     <>
       <Head>
@@ -25,7 +30,9 @@ const Home: NextPage = () => {
             <IncomeTable />
           </div>
         </div>
-        <ExpenseCharts />
+        <StackedAreaChart
+          data={{ expense: expenseData || [], income: incomeData || [] }}
+        />
       </MainLayout>
     </>
   );

@@ -42,6 +42,21 @@ export const incomeRouter = createTRPCRouter({
         },
       });
     }),
+  addBatch: publicProcedure
+    .input(
+      z.array(
+        z.object({
+          amount: z.number().nonnegative(),
+          name: z.string(),
+          date: z.date(),
+        })
+      )
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.income.createMany({
+        data: input,
+      });
+    }),
   getLast: publicProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.income.findFirst({
       orderBy: { date: "desc" },
@@ -56,7 +71,7 @@ export const incomeRouter = createTRPCRouter({
           lte: currDate.date(currDate.daysInMonth()).toDate(),
         },
       },
-      orderBy: { date: "desc" },
+      orderBy: { date: "asc" },
     });
   }),
   delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {

@@ -25,7 +25,8 @@ type DataObject = {
 } & {
   [x: string]: number;
 };
-type BaseData = { date: Date | string | Dayjs; amount: number }[];
+
+export type BaseData = { date: Date | string | Dayjs; amount: number }[];
 export const cumulativeSumByDateOnOrderedArray = <
   TKey extends string,
   TData extends BaseData
@@ -60,6 +61,7 @@ export const cumulativeSumByDateOnOrderedArray = <
     }
     result.push(obj);
   });
+
   return result;
 };
 
@@ -76,6 +78,5 @@ export const combineCumulativeSummedArrays = <TData extends DataObject>(
     }) ?? []
   );
 };
-
 export const findLongestArray = <T>(arr: T[][]) =>
   arr.reduce((p, n) => (n.length > p.length ? n : p));

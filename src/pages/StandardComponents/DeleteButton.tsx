@@ -7,17 +7,20 @@ type DeleteButtonProps = {
   className?: string;
   deleteModalContent: ReactNode;
   onDelete: () => Promise<unknown>;
+  isLoading?: boolean;
 };
 
 const DeleteButton: FC<DeleteButtonProps> = ({
   className = "",
   deleteModalContent,
   onDelete,
+  isLoading = false,
 }) => {
   const { isOpen, onOpen, onClose } = useModal();
   return (
     <>
       <Button
+        isLoading={isLoading}
         onClick={onOpen}
         className={`rounded-xl text-base text-neutral-100 outline-neutral-100 hover:bg-white/10 ${className}`}
       >
@@ -28,6 +31,8 @@ const DeleteButton: FC<DeleteButtonProps> = ({
           {deleteModalContent}
           <div className="flex w-full flex-row gap-x-8">
             <Button
+              className="w-full"
+              isLoading={isLoading}
               type="primary"
               onClick={() => onDelete().then(() => onClose())}
             >
