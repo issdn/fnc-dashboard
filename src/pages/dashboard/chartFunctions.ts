@@ -20,33 +20,43 @@ export const getDaysInMonthArray = (date: string | Date | Dayjs) => {
   );
 };
 
-type BaseDataType = { date: Date | string; amount: number }[];
+type DataObject = {
+  date: dayjs.Dayjs;
+} & {
+  [x: string]: number;
+};
+type BaseData = { date: Date | string | Dayjs; amount: number }[];
 export const cumulativeSumByDateOnOrderedArray = <
   TKey extends string,
-  TData extends BaseDataType
+  TData extends BaseData
 >(
   data: TData,
   key: TKey,
   date: string | Date | Dayjs = "2023-04-02T22:00:00.000Z"
 ) => {
   const monthDaysArray = getDaysInMonthArray(date);
-  type Data = Record<TKey, number> & { date: Dayjs };
 
-  const result: Data[] = [];
+  const dataArray = data.map((d) => {
+    return { date: dayjs(d.date), [key]: d.amount } as DataObject;
+  });
+
+  const result: typeof dataArray = [];
 
   let startAt = 0;
   let lastSummedAmount = 0;
+
   monthDaysArray.forEach((day) => {
-    const obj: Data = {
+    const obj: DataObject = {
       date: day,
       [key]: lastSummedAmount,
-    } as Data;
-    for (let i = startAt; i < data.length; i++) {
-      if (dayjs(data[i]?.date).isSame(day, "day")) {
-        if (data[i]) {
-          (obj[key] as number) += data[i]?.amount ?? 0;
+    } as DataObject;
+
+    for (let i = startAt; i < dataArray.length; i++) {
+      if (dayjs(dataArray[i]?.date).isSame(day, "day")) {
+        if (dataArray[i]) {
+          (obj[key] as number) += dataArray[i]?.[key] ?? 0;
         }
-        lastSummedAmount = obj[key];
+        lastSummedAmount = obj[key] as number;
       } else {
         startAt = i;
         break;
@@ -57,18 +67,18 @@ export const cumulativeSumByDateOnOrderedArray = <
   return result;
 };
 
-export const combineCumulativeSummedArrays = <
-  TData extends Record<string, number> & { date: Dayjs | string | Date }[]
->(
-  dataArrays: TData[]
+export const combineCumulativeSummedArrays = <TData extends DataObject>(
+  dataArrays: TData[][]
 ) => {
-  return dataArrays[0]?.map((item, index) => {
-    const obj = {};
-    dataArrays.forEach((data) => {
-      Object.assign(obj, data[index]);
-    });
-    return obj;
-  });
+  return (
+    dataArrays[0]?.map((_, index) => {
+      const obj = {};
+      dataArrays.forEach((data) => {
+        Object.assign(obj, data[index]);
+      });
+      return obj as TData;
+    }) ?? []
+  );
 };
 
 export const findLongestArray = <T>(arr: T[][]) =>

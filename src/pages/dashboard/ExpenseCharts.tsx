@@ -15,7 +15,7 @@ import {
   cumulativeSumByDateOnOrderedArray,
 } from "./chartFunctions";
 import dayjs from "dayjs";
-import { z } from "zod";
+import type { Expense, Income } from "@prisma/client";
 
 type Flatten<T> = T extends Array<infer U> ? U : never;
 
@@ -25,9 +25,19 @@ const ExpenseCharts: FC = () => {
   const { dateFormat } = useSettings();
 
   const chartData = combineCumulativeSummedArrays([
-    cumulativeSumByDateOnOrderedArray(expenseData || [], "expense", dayjs()),
-    cumulativeSumByDateOnOrderedArray(incomeData || [], "income", dayjs()),
+    cumulativeSumByDateOnOrderedArray<"expense", Expense[]>(
+      expenseData || [],
+      "expense",
+      dayjs()
+    ),
+    cumulativeSumByDateOnOrderedArray<"income", Income[]>(
+      incomeData || [],
+      "income",
+      dayjs()
+    ),
   ]);
+
+  console.log(chartData);
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -47,7 +57,7 @@ const ExpenseCharts: FC = () => {
         </defs>
         <XAxis
           dataKey={(obj: Flatten<typeof chartData>) =>
-            obj.date.format("YYYY/MM/DD")
+            obj.date.format(dateFormat)
           }
         />
         <CartesianGrid strokeDasharray="3 3" />
