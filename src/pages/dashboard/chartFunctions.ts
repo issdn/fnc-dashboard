@@ -36,11 +36,7 @@ export const cumulativeSumByDateOnOrderedArray = <
 ) => {
   const monthDaysArray = getDaysInMonthArray(date);
 
-  const dataArray = data.map((d) => {
-    return { date: dayjs(d.date), [key]: d.amount } as DataObject;
-  });
-
-  const result: typeof dataArray = [];
+  const result: DataObject[] = [];
 
   let startAt = 0;
   let lastSummedAmount = 0;
@@ -51,10 +47,10 @@ export const cumulativeSumByDateOnOrderedArray = <
       [key]: lastSummedAmount,
     } as DataObject;
 
-    for (let i = startAt; i < dataArray.length; i++) {
-      if (dayjs(dataArray[i]?.date).isSame(day, "day")) {
-        if (dataArray[i]) {
-          (obj[key] as number) += dataArray[i]?.[key] ?? 0;
+    for (let i = startAt; i < data.length; i++) {
+      if (dayjs(data[i]?.date).isSame(day, "day")) {
+        if (data[i]) {
+          (obj[key] as number) += data[i]?.amount ?? 0;
         }
         lastSummedAmount = obj[key] as number;
       } else {
