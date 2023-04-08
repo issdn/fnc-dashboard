@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
@@ -47,7 +48,14 @@ export const incomeRouter = createTRPCRouter({
     });
   }),
   getHistory: publicProcedure.query(async ({ ctx }) => {
+    const currDate = dayjs();
     return await ctx.prisma.income.findMany({
+      where: {
+        date: {
+          gte: currDate.date(0).toDate(),
+          lte: currDate.date(currDate.daysInMonth()).toDate(),
+        },
+      },
       orderBy: { date: "desc" },
     });
   }),

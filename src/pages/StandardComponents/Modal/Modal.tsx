@@ -64,7 +64,7 @@ const _ModalPortal: FC<Omit<ModalProps, "isOpen">> = ({
       <div
         ref={modalRef}
         onMouseDown={() => setIsMouseDown(true)}
-        className="flex w-full animate-scaleY flex-col items-center justify-start gap-y-2 rounded-2xl bg-white p-4 md:w-fit md:max-w-[500px]"
+        className="flex max-h-[85%] w-full animate-scaleY flex-col items-center justify-start gap-y-2 rounded-2xl bg-white p-4 md:w-fit md:max-w-[500px]"
       >
         <div className="flex h-fit w-full flex-row justify-end">
           <Button onClick={onClose} className="rounded-xl">

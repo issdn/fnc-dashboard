@@ -39,7 +39,7 @@ const ExpensePanel: FC<ExpensePanelProps> = ({ selectedCategory }) => {
   });
 
   return (
-    <Fieldset legend="New Category">
+    <Fieldset legend="New Expense">
       <ExpenseForm
         submitButtonContent={<Icon icon="add" className="text-3xl" />}
         calendar={calendar}

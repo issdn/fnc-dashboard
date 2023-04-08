@@ -6,6 +6,7 @@ type SpinnerProps = {
 
 const sizes = {
   sm: "h-4 w-4 border-[2px]",
+  base: "h-6 w-6 border-[3px]",
   md: "h-8 w-8 border-[4px]",
   lg: "h-16 w-16  border-[6px]",
 } as const;

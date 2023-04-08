@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
@@ -20,6 +21,22 @@ export const expenseRouter = createTRPCRouter({
           name: input.name,
           date: input.date,
         },
+      });
+    }),
+  addBatch: publicProcedure
+    .input(
+      z.array(
+        z.object({
+          amount: z.number().nonnegative(),
+          category_name: z.string(),
+          name: z.string(),
+          date: z.date(),
+        })
+      )
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.expense.createMany({
+        data: input,
       });
     }),
   edit: publicProcedure
@@ -46,7 +63,18 @@ export const expenseRouter = createTRPCRouter({
       });
     }),
   getAll: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.expense.findMany();
+    const currDate = dayjs();
+    return await ctx.prisma.expense.findMany({
+      where: {
+        date: {
+          gte: currDate.date(0).toDate(),
+          lte: currDate.date(currDate.daysInMonth()).toDate(),
+        },
+      },
+      orderBy: {
+        date: "asc",
+      },
+    });
   }),
   delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
     return await ctx.prisma.expense.delete({

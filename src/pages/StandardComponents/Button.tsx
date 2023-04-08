@@ -1,4 +1,5 @@
 import type { FC, ReactNode } from "react";
+import Spinner from "./Spinner";
 
 export const types = {
   primary:
@@ -25,6 +26,7 @@ export type ButtonProps = {
   children?: ReactNode;
   className?: string;
   type?: ButtonStyles;
+  isLoading?: boolean;
   attributes?: React.ButtonHTMLAttributes<HTMLButtonElement>;
 };
 const Button: FC<ButtonProps> = ({
@@ -32,15 +34,17 @@ const Button: FC<ButtonProps> = ({
   children,
   className = "",
   type = "clear",
+  isLoading = false,
   attributes,
 }) => {
   return (
     <button
+      disabled={isLoading}
       {...attributes}
       className={`flex flex-row items-center justify-center gap-x-1 whitespace-nowrap py-1 px-2 outline-offset-2 transition-colors duration-300 focus:outline md:px-2 ${className} ${types[type]}`}
       onClick={onClick}
     >
-      {children}
+      {isLoading ? <Spinner size="base" /> : children}
     </button>
   );
 };
