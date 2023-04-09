@@ -9,7 +9,7 @@ import FilteredTable, {
 } from "../StandardComponents/FilteredTable";
 import ExpenseForm from "../control/ExpenseForm";
 import { useToastContext } from "../StandardComponents/Toast/toastContext";
-import { useCalendar } from "../StandardComponents/Datepicker/hooks";
+import { useCalendar } from "../StandardComponents/Datepicker/datepicker_hooks";
 import Icon from "../StandardComponents/Icon";
 import Tbody from "../StandardComponents/Tbody";
 import Thead from "../StandardComponents/Thead";
@@ -62,7 +62,12 @@ const ExpenseTable: FC = () => {
 
   return (
     <>
-      <FilteredTable<Expense> filterKey="name" data={data} setData={setData}>
+      <FilteredTable<Expense>
+        title="Expenses"
+        filterKey="name"
+        data={data}
+        setData={setData}
+      >
         <Thead>
           <th>Date</th>
           <th>Name</th>

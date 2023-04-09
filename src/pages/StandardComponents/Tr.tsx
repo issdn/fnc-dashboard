@@ -105,7 +105,7 @@ const Tr: FC<TrProps> = ({
               last:rounded-br-xl 
               [&>td:first-child]:px-1
               [&>td:first-child]:sm:px-2
-              [&>td:first-child]:xl:px-16
+              [&>td:first-child]:xl:px-8
               [&>td:last-child]:px-1
               [&>td:last-child]:sm:px-2
               [&>td:last-child]:xl:px-16`}

@@ -3,7 +3,7 @@ import Input from "~/pages/StandardComponents/Input";
 import Form from "../StandardComponents/Form";
 import type { FormProps } from "../StandardComponents/Form";
 import type { Expense } from "@prisma/client";
-import { useCalendar } from "../StandardComponents/Datepicker/hooks";
+import { useCalendar } from "../StandardComponents/Datepicker/datepicker_hooks";
 import Datepicker from "../StandardComponents/Datepicker/Datepicker";
 
 type ExpenseDTO = Omit<Expense, "id" | "category_name">;

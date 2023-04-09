@@ -20,7 +20,7 @@ export const getDaysInMonthArray = (date: string | Date | Dayjs) => {
   );
 };
 
-type DataObject = {
+export type DataObject = {
   date: dayjs.Dayjs;
 } & {
   [x: string]: number;
@@ -78,5 +78,33 @@ export const combineCumulativeSummedArrays = <TData extends DataObject>(
     }) ?? []
   );
 };
+
 export const findLongestArray = <T>(arr: T[][]) =>
   arr.reduce((p, n) => (n.length > p.length ? n : p));
+
+type DataObjectWithCategory = {
+  category_name: string;
+} & {
+  [key: string]: number | string | Date;
+};
+
+export const cumulativelySumObjectArraysByCategory = <
+  TObj extends DataObjectWithCategory
+>(
+  dataArray: TObj[],
+  key: keyof TObj & keyof DataObjectWithCategory
+) => {
+  const result = new Array<DataObjectWithCategory>();
+  for (const dataObj of dataArray) {
+    const obj = result.find((i) => i.category_name === dataObj.category_name);
+    if (obj) {
+      (obj[key] as number) += dataObj[key] as number;
+    } else {
+      result.push({
+        category_name: dataObj.category_name,
+        [key]: dataObj[key] as number,
+      });
+    }
+  }
+  return result;
+};

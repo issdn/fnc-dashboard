@@ -2,7 +2,7 @@ import Form, { type FormProps } from "../StandardComponents/Form";
 import { z } from "zod";
 import type { Income } from "@prisma/client";
 import Input from "../StandardComponents/Input";
-import { type useCalendar } from "../StandardComponents/Datepicker/hooks";
+import { type useCalendar } from "../StandardComponents/Datepicker/datepicker_hooks";
 import Datepicker from "../StandardComponents/Datepicker/Datepicker";
 
 type IncomeFormProps<T extends Omit<Income, "id">> = Omit<

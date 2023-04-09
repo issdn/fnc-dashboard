@@ -1,8 +1,8 @@
 import {
-  Area,
-  AreaChart,
   CartesianGrid,
   Legend,
+  Line,
+  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -15,20 +15,11 @@ import {
 } from "./chartFunctions";
 import type { Flatten } from "./utilTypes";
 import { useCallback } from "react";
+import { colors } from "./utils";
 
 type StackedAreaChartProps<TData> = {
   data: { [k: string]: TData };
 };
-
-const gradients = [
-  ["#654ea3", "#eaafc8"],
-  ["#f12711", "#f5af19"],
-  ["#2193b0", "#6dd5ed"],
-  ["#cc2b5e", "#753a88"],
-  ["#8E2DE2", "#4A00E0"],
-  ["#59C173", "#5D26C1"],
-  ["#D3CCE3", "#E9E4F0"],
-];
 
 const StackedAreaChart = <TData extends BaseData>({
   data,
@@ -36,9 +27,9 @@ const StackedAreaChart = <TData extends BaseData>({
   const { dateFormat } = useSettings();
 
   let keys = Object.keys(data);
-  if (keys.length > gradients.length) {
+  if (keys.length > colors.length) {
     throw new Error(
-      `You have too many data sets to render. You have ${keys.length} data sets but only ${gradients.length} gradients.`
+      `You have too many data sets to render. You have ${keys.length} data sets but only ${colors.length} colors.`
     );
   }
 
@@ -66,7 +57,7 @@ const StackedAreaChart = <TData extends BaseData>({
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <AreaChart
+      <LineChart
         data={chartData}
         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
       >
@@ -82,13 +73,13 @@ const StackedAreaChart = <TData extends BaseData>({
             >
               <stop
                 offset="15%"
-                stopColor={gradients?.[i]?.[0]}
-                stopOpacity={0.6}
+                stopColor={colors?.[i]?.[0]}
+                stopOpacity={0.8}
               />
               <stop
                 offset="85%"
-                stopColor={gradients?.[i]?.[1]}
-                stopOpacity={0.6}
+                stopColor={colors?.[i]?.[1]}
+                stopOpacity={0.4}
               />
             </linearGradient>
           ))}
@@ -102,17 +93,16 @@ const StackedAreaChart = <TData extends BaseData>({
         <Tooltip />
         <Legend verticalAlign="top" height={48} />
         {keys.map((key, i) => (
-          <Area
+          <Line
+            strokeWidth={4}
+            name={key}
             key={i}
             type="monotone"
-            stackId="1"
             dataKey={key}
-            stroke={gradients?.[i]?.[0]}
-            fillOpacity={1}
-            fill={`url(#gradient${key})`}
+            stroke={colors?.[i]}
           />
         ))}
-      </AreaChart>
+      </LineChart>
     </ResponsiveContainer>
   );
 };

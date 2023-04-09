@@ -65,7 +65,12 @@ const CategoryTable: FC<CategoryTableProps> = ({
 
   return (
     <>
-      <FilteredTable<Category> filterKey="name" data={data} setData={setData}>
+      <FilteredTable<Category>
+        title="Categories"
+        filterKey="name"
+        data={data}
+        setData={setData}
+      >
         <Thead>
           <th>Category</th>
           <th>Monthly Treshold</th>

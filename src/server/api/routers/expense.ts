@@ -62,20 +62,22 @@ export const expenseRouter = createTRPCRouter({
         },
       });
     }),
-  getAll: publicProcedure.query(async ({ ctx }) => {
-    const currDate = dayjs();
-    return await ctx.prisma.expense.findMany({
-      where: {
-        date: {
-          gte: currDate.date(0).toDate(),
-          lte: currDate.date(currDate.daysInMonth()).toDate(),
+  getAll: publicProcedure
+    .input(z.date().default(new Date()))
+    .query(async ({ ctx, input }) => {
+      const currDate = dayjs(input);
+      return await ctx.prisma.expense.findMany({
+        where: {
+          date: {
+            gte: currDate.date(0).toDate(),
+            lte: currDate.date(currDate.daysInMonth()).toDate(),
+          },
         },
-      },
-      orderBy: {
-        date: "asc",
-      },
-    });
-  }),
+        orderBy: {
+          date: "asc",
+        },
+      });
+    }),
   delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
     return await ctx.prisma.expense.delete({
       where: {

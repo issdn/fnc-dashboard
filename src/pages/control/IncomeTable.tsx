@@ -3,7 +3,7 @@ import FilteredTable, {
   useFilteredTableData,
 } from "../StandardComponents/FilteredTable";
 import { type Income } from "@prisma/client";
-import { useCalendar } from "../StandardComponents/Datepicker/hooks";
+import { useCalendar } from "../StandardComponents/Datepicker/datepicker_hooks";
 import { useToastContext } from "../StandardComponents/Toast/toastContext";
 import { api } from "~/utils/api";
 import EditButton from "../StandardComponents/EditButton";
@@ -59,7 +59,12 @@ const IncomeTable: FC = () => {
 
   return (
     <>
-      <FilteredTable<Income> filterKey="name" data={data} setData={setData}>
+      <FilteredTable<Income>
+        title="Incomes"
+        filterKey="name"
+        data={data}
+        setData={setData}
+      >
         <Thead>
           <th>Date</th>
           <th>Name</th>

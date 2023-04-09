@@ -7,12 +7,20 @@ import dynamic from "next/dynamic";
 import { createSSGHelper } from "./utils";
 import IncomeTable from "./control/IncomeTable";
 import { api } from "~/utils/api";
+import DataPieChart from "./dashboard/DataPieChart";
+import { useCalendar } from "./StandardComponents/Datepicker/datepicker_hooks";
+import MonthPicker from "./MonthPicker";
+import dayjs from "dayjs";
 
 const StackedAreaChart = dynamic(import("./dashboard/StackedAreaChart"), {
   ssr: false,
 });
 
 const Home: NextPage = () => {
+  const calendar = useCalendar({
+    from: dayjs("2020/1/1"),
+    to: dayjs("2026/1/1"),
+  });
   const { data: expenseData } = api.expense.getAll.useQuery();
   const { data: incomeData } = api.income.getHistory.useQuery();
 
@@ -30,9 +38,12 @@ const Home: NextPage = () => {
             <IncomeTable />
           </div>
         </div>
-        <StackedAreaChart
-          data={{ expense: expenseData || [], income: incomeData || [] }}
-        />
+        <div className="flex h-full w-full flex-row">
+          <StackedAreaChart
+            data={{ expense: expenseData || [], income: incomeData || [] }}
+          />
+          <DataPieChart />
+        </div>
       </MainLayout>
     </>
   );

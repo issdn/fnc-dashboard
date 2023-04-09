@@ -5,7 +5,7 @@ import CategoryForm from "./CategoryForm";
 import Fieldset from "../StandardComponents/Fieldset";
 import IncomeForm from "./IncomeForm";
 import { type FC } from "react";
-import { useCalendar } from "../StandardComponents/Datepicker/hooks";
+import { useCalendar } from "../StandardComponents/Datepicker/datepicker_hooks";
 
 const categoryInitialValues = { name: "", monthly_treshold: 0 };
 const incomeInitialValues = { name: "", amount: 0, date: new Date() };

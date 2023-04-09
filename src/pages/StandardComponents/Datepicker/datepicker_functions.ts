@@ -1,6 +1,21 @@
 import type { KeyboardEvent, MouseEvent } from "react";
-import type { useCalendar } from "./hooks";
+import type { useCalendar } from "./datepicker_hooks";
 import dayjs from "dayjs";
+
+export const MONTH_NAMES = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "June",
+  "July",
+  "May",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
 const select = (target: HTMLInputElement, start: number) => {
   target.setSelectionRange(start, start);

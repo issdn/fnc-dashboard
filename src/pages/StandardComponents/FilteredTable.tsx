@@ -8,6 +8,7 @@ type FilteredTableProps<TData extends TableData> = {
   setData: React.Dispatch<React.SetStateAction<TData[]>>;
   children: React.ReactNode | React.ReactNode[];
   filterKey: keyof TData;
+  title: string;
 };
 
 export const useFilteredTableData = <TData extends TableData>(
@@ -43,12 +44,16 @@ const FilteredTable = <TData extends TableData>({
   setData,
   children,
   filterKey,
+  title,
 }: FilteredTableProps<TData>) => {
   return (
     <div className="relative h-full w-full overflow-hidden">
       <div className="top-0 left-0 h-full w-full xl:absolute">
         <div className="flex h-full w-full flex-col">
-          <div className="rounded-tr-2xl rounded-tl-2xl bg-neutral-900 px-8 py-4">
+          <div className="flex flex-row items-center rounded-tr-2xl rounded-tl-2xl bg-neutral-900 px-8 py-4">
+            <h1 className="px-2 font-bold capitalize text-neutral-100">
+              {title}
+            </h1>
             <input
               onChange={(e) => {
                 filterObjectsArray(e.target.value, data, filterKey)

@@ -1,8 +1,9 @@
 import { type FC } from "react";
 import { type FieldConfig, useField } from "formik";
 import { useVisibility } from "../hooks";
-import type { useCalendar } from "./hooks";
+import type { useCalendar } from "./datepicker_hooks";
 import {
+  MONTH_NAMES,
   handleKeyDownSelection,
   handleMouseSelection,
 } from "./datepicker_functions";
@@ -13,21 +14,6 @@ type DatepickerProps = {
   calendar: ReturnType<typeof useCalendar>;
 } & JSX.IntrinsicElements["input"] &
   FieldConfig<string>;
-
-const MONTH_NAMES = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "June",
-  "July",
-  "May",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
 
 const Datepicker: FC<DatepickerProps> = ({ calendar, ...props }) => {
   calendar.setFormat("YYYY/MM/DD");

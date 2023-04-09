@@ -17,7 +17,7 @@ export const testExpensesData = [
     id: "64301765edd4caedc833bcc6",
     date: "2023-04-02T00:00:00.000Z",
     amount: 50,
-    category_name: "qq",
+    category_name: "aa",
     name: "Gasoline",
   },
 ];
